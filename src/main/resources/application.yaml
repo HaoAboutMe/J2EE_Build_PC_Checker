@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /identity
+
+spring:
+  application:
+    name: buildpcchecker
+  datasource:
+    url: jdbc:mysql://localhost:3306/identity_service
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  signerKey: "ef251fc07ebf85497bf3b3e3c558386a22756bacb907d9e08d345bfe269ede05"
+  valid-duration: 300 # in seconds
+  refreshable-duration: 1200 # seconds
