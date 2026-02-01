@@ -1,10 +1,10 @@
 package com.j2ee.buildpcchecker.service;
 
+import com.j2ee.buildpcchecker.dto.request.MyInfoUpdateRequest;
 import com.j2ee.buildpcchecker.dto.request.UserCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.UserUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.UserResponse;
 import com.j2ee.buildpcchecker.entity.User;
-import com.j2ee.buildpcchecker.enums.Role;
 import com.j2ee.buildpcchecker.exception.AppException;
 import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.UserMapper;
@@ -76,6 +76,13 @@ public class UserService
 
     public UserResponse updateUser(UserUpdateRequest request, String userId)
     {
+        var context = SecurityContextHolder.getContext().getAuthentication();
+        String email = context.getName();
+
+        if (!"haoaboutme@gmail.com".equals(email)) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         userMapper.updateUser(user, request);
@@ -84,6 +91,18 @@ public class UserService
         var roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
 
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public UserResponse updateMyInfo(MyInfoUpdateRequest request)
+    {
+        var context = SecurityContextHolder.getContext().getAuthentication();
+        String email = context.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        userMapper.updateMyInfo(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

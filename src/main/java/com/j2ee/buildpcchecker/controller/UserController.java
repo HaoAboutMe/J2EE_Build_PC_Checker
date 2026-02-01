@@ -1,6 +1,7 @@
 package com.j2ee.buildpcchecker.controller;
 
 import com.j2ee.buildpcchecker.dto.request.ApiResponse;
+import com.j2ee.buildpcchecker.dto.request.MyInfoUpdateRequest;
 import com.j2ee.buildpcchecker.dto.request.UserCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.UserUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.UserResponse;
@@ -66,6 +67,14 @@ public class UserController
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.updateUser(request, userId));
         return apiResponse;
+    }
+
+    @PutMapping("/users/me")
+    public ApiResponse<UserResponse> updateCurrentUser(@RequestBody MyInfoUpdateRequest request)
+    {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateMyInfo(request))
+                .build();
     }
 
     @DeleteMapping("/users/{userId}")

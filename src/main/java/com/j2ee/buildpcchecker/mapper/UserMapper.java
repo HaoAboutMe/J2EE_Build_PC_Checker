@@ -1,5 +1,6 @@
 package com.j2ee.buildpcchecker.mapper;
 
+import com.j2ee.buildpcchecker.dto.request.MyInfoUpdateRequest;
 import com.j2ee.buildpcchecker.dto.request.UserCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.UserUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.UserResponse;
@@ -19,4 +20,7 @@ public interface UserMapper
 
     @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
+
+    @Mapping(target = "roles", ignore = true)
+    void updateMyInfo(@MappingTarget User user, MyInfoUpdateRequest request);
 }
