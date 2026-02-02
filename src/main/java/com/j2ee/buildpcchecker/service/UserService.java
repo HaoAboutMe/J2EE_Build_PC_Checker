@@ -1,5 +1,6 @@
 package com.j2ee.buildpcchecker.service;
 
+import com.j2ee.buildpcchecker.dto.request.ChangePasswordRequest;
 import com.j2ee.buildpcchecker.dto.request.MyInfoUpdateRequest;
 import com.j2ee.buildpcchecker.dto.request.UserCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.UserUpdateRequest;
@@ -103,6 +104,24 @@ public class UserService
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         userMapper.updateMyInfo(user, request);
 
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public UserResponse changePassword(ChangePasswordRequest request)
+    {
+        var context = SecurityContextHolder.getContext().getAuthentication();
+        String email = context.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        boolean authenticated = passwordEncoder.matches(request.getOldPassword(), user.getPassword());
+        if(!authenticated)
+        {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

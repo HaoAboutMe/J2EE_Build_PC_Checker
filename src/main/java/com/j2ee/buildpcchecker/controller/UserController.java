@@ -1,9 +1,6 @@
 package com.j2ee.buildpcchecker.controller;
 
-import com.j2ee.buildpcchecker.dto.request.ApiResponse;
-import com.j2ee.buildpcchecker.dto.request.MyInfoUpdateRequest;
-import com.j2ee.buildpcchecker.dto.request.UserCreationRequest;
-import com.j2ee.buildpcchecker.dto.request.UserUpdateRequest;
+import com.j2ee.buildpcchecker.dto.request.*;
 import com.j2ee.buildpcchecker.dto.response.UserResponse;
 import com.j2ee.buildpcchecker.service.UserService;
 import jakarta.validation.Valid;
@@ -74,6 +71,15 @@ public class UserController
     {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateMyInfo(request))
+                .build();
+    }
+
+    //Endponit Change Password
+    @PutMapping("/users/me/change-password")
+    public ApiResponse<UserResponse> changePassword(@RequestBody ChangePasswordRequest request)
+    {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.changePassword(request))
                 .build();
     }
 
