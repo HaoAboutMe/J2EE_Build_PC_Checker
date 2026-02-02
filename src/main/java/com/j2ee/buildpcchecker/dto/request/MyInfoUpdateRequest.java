@@ -19,7 +19,6 @@ public class MyInfoUpdateRequest
     String username;
     String firstname;
     String lastname;
-    String password;
 
     @DateOfBirthConstraint(min = 18, message = "INVALID_DATE_OF_BIRTH")
     LocalDate dateOfBirth;
