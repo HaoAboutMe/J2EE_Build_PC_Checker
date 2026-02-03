@@ -21,7 +21,6 @@ public class UserUpdateRequest
     String firstname;
     String lastname;
     String email;
-    String password;
 
     @DateOfBirthConstraint(min = 18, message = "INVALID_DATE_OF_BIRTH")
     LocalDate dateOfBirth;
