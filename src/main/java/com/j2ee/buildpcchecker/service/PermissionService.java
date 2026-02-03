@@ -7,6 +7,7 @@ import com.j2ee.buildpcchecker.mapper.PermissionMapper;
 import com.j2ee.buildpcchecker.repository.PermissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class PermissionService
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public PermissionResponse create(PermissionRequest request)
     {
         Permission permission = permissionMapper.toPermission(request);
@@ -27,6 +29,7 @@ public class PermissionService
         return permissionMapper.toPermissionResponse(permission);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<PermissionResponse> getAll()
     {
         var permissions = permissionRepository.findAll();
@@ -34,6 +37,7 @@ public class PermissionService
         return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String permission)
     {
         permissionRepository.deleteById(permission);
