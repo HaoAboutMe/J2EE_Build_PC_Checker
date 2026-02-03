@@ -8,6 +8,7 @@ import com.j2ee.buildpcchecker.repository.PermissionRepository;
 import com.j2ee.buildpcchecker.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class RoleService
     PermissionRepository permissionRepository;
     RoleMapper roleMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public RoleResponse create(RoleRequest request)
     {
         Role role = roleMapper.toRole(request);
@@ -33,6 +35,7 @@ public class RoleService
         return roleMapper.toRoleResponse(role);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<RoleResponse> getAll()
     {
         var roles = roleRepository.findAll();
@@ -40,6 +43,7 @@ public class RoleService
         return roles.stream().map(roleMapper::toRoleResponse).toList();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String roleName)
     {
         roleRepository.deleteById(roleName);

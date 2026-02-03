@@ -75,15 +75,9 @@ public class UserService
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId)));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUser(UserUpdateRequest request, String userId)
     {
-        var context = SecurityContextHolder.getContext().getAuthentication();
-        String email = context.getName();
-
-        if (!"haoaboutme@gmail.com".equals(email)) {
-            throw new AppException(ErrorCode.UNAUTHORIZED);
-        }
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         userMapper.updateUser(user, request);
@@ -124,6 +118,7 @@ public class UserService
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId)
     {
         User user = userRepository.findById(userId)
