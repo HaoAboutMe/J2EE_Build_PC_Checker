@@ -11,10 +11,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PcieVersionRequest {
 
-    @NotBlank(message = "PCIe Version ID is required")
+    @NotBlank(message = "PCIE_VERSION_ID_REQUIRED")
     String id;
 
-    @NotBlank(message = "PCIe Version name is required")
+    @NotBlank(message = "PCIE_VERSION_NAME_REQUIRED")
     String name;
 }
 

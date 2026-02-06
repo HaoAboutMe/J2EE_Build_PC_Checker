@@ -12,34 +12,34 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MainboardCreationRequest {
 
-    @NotBlank(message = "Mainboard name is required")
+    @NotBlank(message = "MAINBOARD_NAME_REQUIRED")
     String name;
 
-    @NotBlank(message = "Socket ID is required")
+    @NotBlank(message = "MAINBOARD_SOCKET_ID_REQUIRED")
     String socketId;
 
-    @NotNull(message = "VRM phase is required")
+    @NotNull(message = "MAINBOARD_VRM_PHASE_REQUIRED")
     Integer vrmPhase;
 
-    @NotNull(message = "CPU TDP support is required")
+    @NotNull(message = "MAINBOARD_CPU_TDP_SUPPORT_REQUIRED")
     Integer cpuTdpSupport;
 
-    @NotBlank(message = "RAM Type ID is required")
+    @NotBlank(message = "MAINBOARD_RAM_TYPE_ID_REQUIRED")
     String ramTypeId;
 
-    @NotNull(message = "RAM bus max is required")
+    @NotNull(message = "MAINBOARD_RAM_BUS_MAX_REQUIRED")
     Integer ramBusMax;
 
-    @NotNull(message = "RAM slot is required")
+    @NotNull(message = "MAINBOARD_RAM_SLOT_REQUIRED")
     Integer ramSlot;
 
-    @NotNull(message = "RAM max capacity is required")
+    @NotNull(message = "MAINBOARD_RAM_MAX_CAPACITY_REQUIRED")
     Integer ramMaxCapacity;
 
-    @NotBlank(message = "Size is required")
+    @NotBlank(message = "MAINBOARD_SIZE_REQUIRED")
     String size;
 
-    @NotBlank(message = "PCIe VGA Version ID is required")
+    @NotBlank(message = "MAINBOARD_PCIE_VGA_VERSION_ID_REQUIRED")
     String pcieVgaVersionId;
 
     Integer m2Slot;

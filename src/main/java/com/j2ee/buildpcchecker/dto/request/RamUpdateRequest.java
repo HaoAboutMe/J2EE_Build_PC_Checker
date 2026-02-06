@@ -1,6 +1,5 @@
 package com.j2ee.buildpcchecker.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,11 +8,15 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SocketRequest {
+public class RamUpdateRequest {
 
-    @NotBlank(message = "SOCKET_ID_REQUIRED")
-    String id;
-
-    @NotBlank(message = "SOCKET_NAME_REQUIRED")
     String name;
+    String ramTypeId;
+    Integer ramBus;
+    Integer ramCas;
+    Integer capacityPerStick;
+    Integer quantity;
+    Integer tdp;
+    String description;
 }
+

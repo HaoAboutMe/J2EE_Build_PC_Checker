@@ -11,10 +11,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RamTypeRequest {
 
-    @NotBlank(message = "RAM Type ID is required")
+    @NotBlank(message = "RAM_TYPE_ID_VALUE_REQUIRED")
     String id;
 
-    @NotBlank(message = "RAM Type name is required")
+    @NotBlank(message = "RAM_TYPE_NAME_REQUIRED")
     String name;
 }
 

@@ -10,27 +10,25 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CpuCreationRequest {
+public class VgaCreationRequest {
 
-    @NotBlank(message = "CPU_NAME_REQUIRED")
+    @NotBlank(message = "VGA_NAME_REQUIRED")
     String name;
 
-    @NotBlank(message = "CPU_SOCKET_ID_REQUIRED")
-    String socketId;
+    @NotNull(message = "VGA_LENGTH_REQUIRED")
+    Integer lengthMm;
 
-    Integer vrmMin;
-
-    @NotNull(message = "CPU_IGPU_REQUIRED")
-    Boolean igpu;
-
-    @NotNull(message = "CPU_TDP_REQUIRED")
+    @NotNull(message = "VGA_TDP_REQUIRED")
     Integer tdp;
 
-    @NotBlank(message = "CPU_PCIE_VERSION_ID_REQUIRED")
+    @NotBlank(message = "VGA_PCIE_VERSION_ID_REQUIRED")
     String pcieVersionId;
 
-    @NotNull(message = "CPU_SCORE_REQUIRED")
+    String powerConnector;
+
+    @NotNull(message = "VGA_SCORE_REQUIRED")
     Integer score;
 
     String description;
 }
+
