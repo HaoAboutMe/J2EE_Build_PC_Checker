@@ -17,6 +17,10 @@ public enum ErrorCode
     UNAUTHENTICATED(1007, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1008, "You don't have permission", HttpStatus.FORBIDDEN),
     INVALID_DATE_OF_BIRTH(1009, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+    INVALID_VERIFICATION_TOKEN(1010, "Invalid or expired verification token", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_VERIFIED(1011, "Email is not verified. Please verify your email first", HttpStatus.FORBIDDEN),
+    EMAIL_ALREADY_VERIFIED(1012, "Email is already verified", HttpStatus.BAD_REQUEST),
+    ACCOUNT_DISABLED(1013, "Account is disabled", HttpStatus.FORBIDDEN),
 
     // CPU validation errors (2001-2099)
     CPU_NAME_REQUIRED(2001, "CPU name is required", HttpStatus.BAD_REQUEST),
