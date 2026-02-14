@@ -6,6 +6,8 @@ import com.j2ee.buildpcchecker.dto.response.CpuResponse;
 import com.j2ee.buildpcchecker.entity.Cpu;
 import com.j2ee.buildpcchecker.entity.PcieVersion;
 import com.j2ee.buildpcchecker.entity.Socket;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.CpuMapper;
 import com.j2ee.buildpcchecker.repository.CpuRepository;
 import com.j2ee.buildpcchecker.repository.PcieVersionRepository;
@@ -35,6 +37,12 @@ public class CpuService {
      */
     public CpuResponse createCpu(CpuCreationRequest request) {
         log.info("Creating new CPU: {}", request.getName());
+
+        // Check if CPU name already exists
+        if (cpuRepository.existsByName(request.getName())) {
+            log.error("CPU name already exists: {}", request.getName());
+            throw new AppException(ErrorCode.CPU_NAME_ALREADY_EXISTS);
+        }
 
         // Get Socket
         Socket socket = socketRepository.findById(request.getSocketId())

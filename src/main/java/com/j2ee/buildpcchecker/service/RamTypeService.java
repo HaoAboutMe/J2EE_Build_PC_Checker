@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.RamTypeRequest;
 import com.j2ee.buildpcchecker.dto.response.RamTypeResponse;
 import com.j2ee.buildpcchecker.entity.RamType;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.RamTypeMapper;
 import com.j2ee.buildpcchecker.repository.RamTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class RamTypeService {
         // Check if RAM type already exists
         if (ramTypeRepository.existsById(request.getId())) {
             log.error("RAM Type already exists with ID: {}", request.getId());
-            throw new RuntimeException("RAM Type already exists with id: " + request.getId());
+            throw new AppException(ErrorCode.RAM_TYPE_ALREADY_EXISTS);
         }
 
         RamType ramType = ramTypeMapper.toRamType(request);
@@ -63,7 +65,7 @@ public class RamTypeService {
         RamType ramType = ramTypeRepository.findById(ramTypeId)
                 .orElseThrow(() -> {
                     log.error("RAM Type not found with ID: {}", ramTypeId);
-                    return new RuntimeException("RAM Type not found with id: " + ramTypeId);
+                    return new AppException(ErrorCode.RAM_TYPE_NOT_FOUND);
                 });
 
         return ramTypeMapper.toRamTypeResponse(ramType);
@@ -81,7 +83,7 @@ public class RamTypeService {
         RamType ramType = ramTypeRepository.findById(ramTypeId)
                 .orElseThrow(() -> {
                     log.error("RAM Type not found with ID: {}", ramTypeId);
-                    return new RuntimeException("RAM Type not found with id: " + ramTypeId);
+                    return new AppException(ErrorCode.RAM_TYPE_NOT_FOUND);
                 });
 
         ramTypeMapper.updateRamType(ramType, request);
@@ -101,7 +103,7 @@ public class RamTypeService {
         RamType ramType = ramTypeRepository.findById(ramTypeId)
                 .orElseThrow(() -> {
                     log.error("RAM Type not found with ID: {}", ramTypeId);
-                    return new RuntimeException("RAM Type not found with id: " + ramTypeId);
+                    return new AppException(ErrorCode.RAM_TYPE_NOT_FOUND);
                 });
 
         ramTypeRepository.delete(ramType);

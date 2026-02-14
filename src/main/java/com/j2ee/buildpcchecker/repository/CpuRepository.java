@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CpuRepository extends JpaRepository<Cpu, String> {
+    boolean existsByName(String name);
 }
 

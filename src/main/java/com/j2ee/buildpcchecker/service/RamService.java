@@ -5,6 +5,8 @@ import com.j2ee.buildpcchecker.dto.request.RamUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.RamResponse;
 import com.j2ee.buildpcchecker.entity.Ram;
 import com.j2ee.buildpcchecker.entity.RamType;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.RamMapper;
 import com.j2ee.buildpcchecker.repository.RamRepository;
 import com.j2ee.buildpcchecker.repository.RamTypeRepository;
@@ -32,6 +34,12 @@ public class RamService {
      */
     public RamResponse createRam(RamCreationRequest request) {
         log.info("Creating new RAM: {}", request.getName());
+
+        // Check if RAM name already exists
+        if (ramRepository.existsByName(request.getName())) {
+            log.error("RAM name already exists: {}", request.getName());
+            throw new AppException(ErrorCode.RAM_NAME_ALREADY_EXISTS);
+        }
 
         // Get RamType
         RamType ramType = ramTypeRepository.findById(request.getRamTypeId())
