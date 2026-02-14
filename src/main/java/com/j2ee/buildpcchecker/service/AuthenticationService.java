@@ -87,6 +87,18 @@ public class AuthenticationService
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
+        // Kiểm tra email đã được xác thực chưa
+        if (!user.getEmailVerified())
+        {
+            throw new AppException(ErrorCode.EMAIL_NOT_VERIFIED);
+        }
+
+        // Kiểm tra tài khoản đã được kích hoạt chưa
+        if (!user.getEnabled())
+        {
+            throw new AppException(ErrorCode.ACCOUNT_DISABLED);
+        }
+
         var token = generateToken(user);
         return AuthenticationResponse.builder()
                 .isAuthenticated(true)

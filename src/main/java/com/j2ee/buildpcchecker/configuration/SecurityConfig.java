@@ -20,7 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENPOINTS = {"/users",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh"
+            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/auth/verify-email", "/auth/resend-verification"
     };
 
     @Autowired
@@ -33,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
                 request.requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINTS).permitAll()
                         .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->

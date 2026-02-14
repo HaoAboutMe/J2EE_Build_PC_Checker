@@ -99,6 +99,8 @@ public class ApplicationInitConfig
                         .email("haoaboutme@gmail.com")
                         .dateOfBirth(LocalDate.parse("2026-01-01"))
                         .roles(roles)
+                        .enabled(true)  // Admin được kích hoạt ngay
+                        .emailVerified(true)  // Email admin đã được xác thực
                         .build();
 
                 userRepository.save(adminUser);

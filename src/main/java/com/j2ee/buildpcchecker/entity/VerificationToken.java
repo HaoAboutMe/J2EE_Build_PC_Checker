@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -15,30 +13,25 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User
+public class VerificationToken
 {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String username;
-    String firstname;
-    String lastname;
-    String email;
-    String password;
-    LocalDate dateOfBirth;
 
-    @Builder.Default
-    Boolean enabled = false;  // Tài khoản chưa được kích hoạt mặc định
+    String token;
 
-    @Builder.Default
-    Boolean emailVerified = false;  // Email chưa được xác thực
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
+    User user;
 
-    @ManyToMany
-    Set<Role> roles;
+    LocalDateTime expiryDate;
     LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        expiryDate = LocalDateTime.now().plusHours(24); // Token hết hạn sau 24 giờ
     }
 }
+
