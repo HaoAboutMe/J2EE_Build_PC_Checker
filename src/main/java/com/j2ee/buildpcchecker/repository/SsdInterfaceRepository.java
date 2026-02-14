@@ -1,11 +1,9 @@
 package com.j2ee.buildpcchecker.repository;
 
-import com.j2ee.buildpcchecker.entity.Cpu;
+import com.j2ee.buildpcchecker.entity.SsdInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CpuRepository extends JpaRepository<Cpu, String> {
-    boolean existsByName(String name);
+public interface SsdInterfaceRepository extends JpaRepository<SsdInterface, String> {
 }
-

@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MainboardRepository extends JpaRepository<Mainboard, String> {
+    boolean existsByName(String name);
 }
 

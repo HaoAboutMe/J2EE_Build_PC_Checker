@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RamRepository extends JpaRepository<Ram, String> {
+    boolean existsByName(String name);
 }
 
