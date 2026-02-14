@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VgaRepository extends JpaRepository<Vga, String> {
+    boolean existsByName(String name);
 }
 

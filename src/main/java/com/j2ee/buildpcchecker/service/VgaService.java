@@ -5,6 +5,8 @@ import com.j2ee.buildpcchecker.dto.request.VgaUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.VgaResponse;
 import com.j2ee.buildpcchecker.entity.PcieVersion;
 import com.j2ee.buildpcchecker.entity.Vga;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.VgaMapper;
 import com.j2ee.buildpcchecker.repository.PcieVersionRepository;
 import com.j2ee.buildpcchecker.repository.VgaRepository;
@@ -32,6 +34,12 @@ public class VgaService {
      */
     public VgaResponse createVga(VgaCreationRequest request) {
         log.info("Creating new VGA: {}", request.getName());
+
+        // Check if VGA name already exists
+        if (vgaRepository.existsByName(request.getName())) {
+            log.error("VGA name already exists: {}", request.getName());
+            throw new AppException(ErrorCode.VGA_NAME_ALREADY_EXISTS);
+        }
 
         // Get PCIe Version
         PcieVersion pcieVersion = pcieVersionRepository.findById(request.getPcieVersionId())

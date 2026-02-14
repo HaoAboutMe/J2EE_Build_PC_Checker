@@ -7,6 +7,8 @@ import com.j2ee.buildpcchecker.entity.Mainboard;
 import com.j2ee.buildpcchecker.entity.PcieVersion;
 import com.j2ee.buildpcchecker.entity.RamType;
 import com.j2ee.buildpcchecker.entity.Socket;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.MainboardMapper;
 import com.j2ee.buildpcchecker.repository.MainboardRepository;
 import com.j2ee.buildpcchecker.repository.PcieVersionRepository;
@@ -38,6 +40,12 @@ public class MainboardService {
      */
     public MainboardResponse createMainboard(MainboardCreationRequest request) {
         log.info("Creating new Mainboard: {}", request.getName());
+
+        // Check if Mainboard name already exists
+        if (mainboardRepository.existsByName(request.getName())) {
+            log.error("Mainboard name already exists: {}", request.getName());
+            throw new AppException(ErrorCode.MAINBOARD_NAME_ALREADY_EXISTS);
+        }
 
         // Get Socket
         Socket socket = socketRepository.findById(request.getSocketId())
