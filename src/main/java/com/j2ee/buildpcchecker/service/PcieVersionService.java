@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.PcieVersionRequest;
 import com.j2ee.buildpcchecker.dto.response.PcieVersionResponse;
 import com.j2ee.buildpcchecker.entity.PcieVersion;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.PcieVersionMapper;
 import com.j2ee.buildpcchecker.repository.PcieVersionRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +65,7 @@ public class PcieVersionService {
         PcieVersion pcieVersion = pcieVersionRepository.findById(pcieVersionId)
                 .orElseThrow(() -> {
                     log.error("PCIe Version not found with ID: {}", pcieVersionId);
-                    return new RuntimeException("PCIe Version not found with id: " + pcieVersionId);
+                    return new AppException(ErrorCode.PCIE_VERSION_NOT_FOUND);
                 });
 
         return pcieVersionMapper.toPcieVersionResponse(pcieVersion);
@@ -81,7 +83,7 @@ public class PcieVersionService {
         PcieVersion pcieVersion = pcieVersionRepository.findById(pcieVersionId)
                 .orElseThrow(() -> {
                     log.error("PCIe Version not found with ID: {}", pcieVersionId);
-                    return new RuntimeException("PCIe Version not found with id: " + pcieVersionId);
+                    return new AppException(ErrorCode.PCIE_VERSION_NOT_FOUND);
                 });
 
         pcieVersionMapper.updatePcieVersion(pcieVersion, request);
@@ -101,7 +103,7 @@ public class PcieVersionService {
         PcieVersion pcieVersion = pcieVersionRepository.findById(pcieVersionId)
                 .orElseThrow(() -> {
                     log.error("PCIe Version not found with ID: {}", pcieVersionId);
-                    return new RuntimeException("PCIe Version not found with id: " + pcieVersionId);
+                    return new AppException(ErrorCode.PCIE_VERSION_NOT_FOUND);
                 });
 
         pcieVersionRepository.delete(pcieVersion);

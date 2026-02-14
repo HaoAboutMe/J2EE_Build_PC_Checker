@@ -21,12 +21,13 @@ public class Hdd {
     @Column(nullable = false)
     String name;
 
-    @Column(name = "form_factor", nullable = false)
-    String formFactor; // 3.5" / 2.5"
+    @ManyToOne
+    @JoinColumn(name = "form_factor_id", nullable = false)
+    FormFactor formFactor; // 3.5" / 2.5"
 
     @ManyToOne
-    @JoinColumn(name = "hdd_interface_id", nullable = false)
-    HddInterface hddInterface; // SATA_3 / SAS
+    @JoinColumn(name = "interface_type_id", nullable = false)
+    InterfaceType interfaceType; // SATA_3 / SAS
 
     @Column(nullable = false)
     Integer capacity; // GB

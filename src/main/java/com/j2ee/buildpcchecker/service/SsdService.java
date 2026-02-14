@@ -3,13 +3,15 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.SsdCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.SsdUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.SsdResponse;
+import com.j2ee.buildpcchecker.entity.FormFactor;
 import com.j2ee.buildpcchecker.entity.Ssd;
-import com.j2ee.buildpcchecker.entity.SsdInterface;
+import com.j2ee.buildpcchecker.entity.InterfaceType;
 import com.j2ee.buildpcchecker.entity.SsdType;
 import com.j2ee.buildpcchecker.exception.AppException;
 import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.SsdMapper;
-import com.j2ee.buildpcchecker.repository.SsdInterfaceRepository;
+import com.j2ee.buildpcchecker.repository.FormFactorRepository;
+import com.j2ee.buildpcchecker.repository.InterfaceTypeRepository;
 import com.j2ee.buildpcchecker.repository.SsdRepository;
 import com.j2ee.buildpcchecker.repository.SsdTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +29,9 @@ public class SsdService {
 
     SsdRepository ssdRepository;
     SsdMapper ssdMapper;
+    FormFactorRepository formFactorRepository;
     SsdTypeRepository ssdTypeRepository;
-    SsdInterfaceRepository ssdInterfaceRepository;
+    InterfaceTypeRepository interfaceTypeRepository;
 
     /**
      * Create a new SSD
@@ -51,16 +54,24 @@ public class SsdService {
                     return new AppException(ErrorCode.SSD_TYPE_NOT_FOUND);
                 });
 
-        // Get SsdInterface
-        SsdInterface ssdInterface = ssdInterfaceRepository.findById(request.getSsdInterfaceId())
+        // Get FormFactor
+        FormFactor formFactor = formFactorRepository.findById(request.getFormFactorId())
                 .orElseThrow(() -> {
-                    log.error("SSD Interface not found with ID: {}", request.getSsdInterfaceId());
-                    return new AppException(ErrorCode.SSD_INTERFACE_NOT_FOUND);
+                    log.error("Form Factor not found with ID: {}", request.getFormFactorId());
+                    return new AppException(ErrorCode.FORM_FACTOR_NOT_FOUND);
+                });
+
+        // Get InterfaceType
+        InterfaceType interfaceType = interfaceTypeRepository.findById(request.getInterfaceTypeId())
+                .orElseThrow(() -> {
+                    log.error("Interface Type not found with ID: {}", request.getInterfaceTypeId());
+                    return new AppException(ErrorCode.INTERFACE_TYPE_NOT_FOUND);
                 });
 
         Ssd ssd = ssdMapper.toSsd(request);
         ssd.setSsdType(ssdType);
-        ssd.setSsdInterface(ssdInterface);
+        ssd.setFormFactor(formFactor);
+        ssd.setInterfaceType(interfaceType);
 
         Ssd savedSsd = ssdRepository.save(ssd);
 
@@ -122,14 +133,24 @@ public class SsdService {
             ssd.setSsdType(ssdType);
         }
 
-        // Update SsdInterface if provided
-        if (request.getSsdInterfaceId() != null) {
-            SsdInterface ssdInterface = ssdInterfaceRepository.findById(request.getSsdInterfaceId())
+        // Update FormFactor if provided
+        if (request.getFormFactorId() != null) {
+            FormFactor formFactor = formFactorRepository.findById(request.getFormFactorId())
                     .orElseThrow(() -> {
-                        log.error("SSD Interface not found with ID: {}", request.getSsdInterfaceId());
-                        return new AppException(ErrorCode.SSD_INTERFACE_NOT_FOUND);
+                        log.error("Form Factor not found with ID: {}", request.getFormFactorId());
+                        return new AppException(ErrorCode.FORM_FACTOR_NOT_FOUND);
                     });
-            ssd.setSsdInterface(ssdInterface);
+            ssd.setFormFactor(formFactor);
+        }
+
+        // Update InterfaceType if provided
+        if (request.getInterfaceTypeId() != null) {
+            InterfaceType interfaceType = interfaceTypeRepository.findById(request.getInterfaceTypeId())
+                    .orElseThrow(() -> {
+                        log.error("Interface Type not found with ID: {}", request.getInterfaceTypeId());
+                        return new AppException(ErrorCode.INTERFACE_TYPE_NOT_FOUND);
+                    });
+            ssd.setInterfaceType(interfaceType);
         }
 
         Ssd updatedSsd = ssdRepository.save(ssd);

@@ -13,8 +13,8 @@ public class SsdResponse {
     String id;
     String name;
     SsdTypeResponse ssdType;
-    String formFactor;
-    SsdInterfaceResponse ssdInterface;
+    FormFactorResponse formFactor;
+    InterfaceTypeResponse interfaceType;
     Integer capacity;
     Integer tdp;
     String description;

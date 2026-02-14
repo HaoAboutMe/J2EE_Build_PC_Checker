@@ -8,8 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HddInterfaceResponse {
+public class InterfaceTypeResponse {
 
     String id;
     String name;
 }
+

@@ -3,12 +3,14 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.HddCreationRequest;
 import com.j2ee.buildpcchecker.dto.request.HddUpdateRequest;
 import com.j2ee.buildpcchecker.dto.response.HddResponse;
+import com.j2ee.buildpcchecker.entity.FormFactor;
 import com.j2ee.buildpcchecker.entity.Hdd;
-import com.j2ee.buildpcchecker.entity.HddInterface;
+import com.j2ee.buildpcchecker.entity.InterfaceType;
 import com.j2ee.buildpcchecker.exception.AppException;
 import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.HddMapper;
-import com.j2ee.buildpcchecker.repository.HddInterfaceRepository;
+import com.j2ee.buildpcchecker.repository.FormFactorRepository;
+import com.j2ee.buildpcchecker.repository.InterfaceTypeRepository;
 import com.j2ee.buildpcchecker.repository.HddRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +27,8 @@ public class HddService {
 
     HddRepository hddRepository;
     HddMapper hddMapper;
-    HddInterfaceRepository hddInterfaceRepository;
+    InterfaceTypeRepository interfaceTypeRepository;
+    FormFactorRepository formFactorRepository;
 
     /**
      * Create a new HDD
@@ -41,15 +44,23 @@ public class HddService {
             throw new AppException(ErrorCode.HDD_NAME_ALREADY_EXISTS);
         }
 
-        // Get HddInterface
-        HddInterface hddInterface = hddInterfaceRepository.findById(request.getHddInterfaceId())
+        // Get FormFactor
+        FormFactor formFactor = formFactorRepository.findById(request.getFormFactorId())
                 .orElseThrow(() -> {
-                    log.error("HDD Interface not found with ID: {}", request.getHddInterfaceId());
-                    return new AppException(ErrorCode.HDD_INTERFACE_NOT_FOUND);
+                    log.error("Form Factor not found with ID: {}", request.getFormFactorId());
+                    return new AppException(ErrorCode.FORM_FACTOR_NOT_FOUND);
+                });
+
+        // Get InterfaceType
+        InterfaceType interfaceType = interfaceTypeRepository.findById(request.getInterfaceTypeId())
+                .orElseThrow(() -> {
+                    log.error("Interface Type not found with ID: {}", request.getInterfaceTypeId());
+                    return new AppException(ErrorCode.INTERFACE_TYPE_NOT_FOUND);
                 });
 
         Hdd hdd = hddMapper.toHdd(request);
-        hdd.setHddInterface(hddInterface);
+        hdd.setFormFactor(formFactor);
+        hdd.setInterfaceType(interfaceType);
 
         Hdd savedHdd = hddRepository.save(hdd);
 
@@ -101,14 +112,24 @@ public class HddService {
 
         hddMapper.updateHdd(hdd, request);
 
-        // Update HddInterface if provided
-        if (request.getHddInterfaceId() != null) {
-            HddInterface hddInterface = hddInterfaceRepository.findById(request.getHddInterfaceId())
+        // Update FormFactor if provided
+        if (request.getFormFactorId() != null) {
+            FormFactor formFactor = formFactorRepository.findById(request.getFormFactorId())
                     .orElseThrow(() -> {
-                        log.error("HDD Interface not found with ID: {}", request.getHddInterfaceId());
-                        return new AppException(ErrorCode.HDD_INTERFACE_NOT_FOUND);
+                        log.error("Form Factor not found with ID: {}", request.getFormFactorId());
+                        return new AppException(ErrorCode.FORM_FACTOR_NOT_FOUND);
                     });
-            hdd.setHddInterface(hddInterface);
+            hdd.setFormFactor(formFactor);
+        }
+
+        // Update InterfaceType if provided
+        if (request.getInterfaceTypeId() != null) {
+            InterfaceType interfaceType = interfaceTypeRepository.findById(request.getInterfaceTypeId())
+                    .orElseThrow(() -> {
+                        log.error("Interface Type not found with ID: {}", request.getInterfaceTypeId());
+                        return new AppException(ErrorCode.INTERFACE_TYPE_NOT_FOUND);
+                    });
+            hdd.setInterfaceType(interfaceType);
         }
 
         Hdd updatedHdd = hddRepository.save(hdd);

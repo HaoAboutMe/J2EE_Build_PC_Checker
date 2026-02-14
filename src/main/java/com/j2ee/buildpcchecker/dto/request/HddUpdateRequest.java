@@ -11,8 +11,8 @@ import lombok.experimental.FieldDefaults;
 public class HddUpdateRequest {
 
     String name;
-    String formFactor;
-    String hddInterfaceId;
+    String formFactorId;
+    String interfaceTypeId;
     Integer capacity;
     Integer tdp;
     String description;

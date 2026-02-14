@@ -12,8 +12,8 @@ public class SsdUpdateRequest {
 
     String name;
     String ssdTypeId;
-    String formFactor;
-    String ssdInterfaceId;
+    String formFactorId;
+    String interfaceTypeId;
     Integer capacity;
     Integer tdp;
     String description;

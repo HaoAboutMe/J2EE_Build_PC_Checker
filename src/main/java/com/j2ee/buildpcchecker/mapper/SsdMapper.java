@@ -13,8 +13,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface SsdMapper {
 
+    @Mapping(target = "formFactor", ignore = true) // Will be set manually in service
     @Mapping(target = "ssdType", ignore = true) // Will be set manually in service
-    @Mapping(target = "ssdInterface", ignore = true) // Will be set manually in service
+    @Mapping(target = "interfaceType", ignore = true) // Will be set manually in service
     @Mapping(target = "id", ignore = true)
     Ssd toSsd(SsdCreationRequest request);
 
@@ -22,8 +23,9 @@ public interface SsdMapper {
 
     List<SsdResponse> toListSsdResponse(List<Ssd> ssds);
     
+    @Mapping(target = "formFactor", ignore = true) // Will be set manually in service if needed
     @Mapping(target = "ssdType", ignore = true) // Will be set manually in service if needed
-    @Mapping(target = "ssdInterface", ignore = true) // Will be set manually in service if needed
+    @Mapping(target = "interfaceType", ignore = true) // Will be set manually in service if needed
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     void updateSsd(@MappingTarget Ssd ssd, SsdUpdateRequest request);

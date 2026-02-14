@@ -9,11 +9,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SsdInterfaceRequest {
+public class InterfaceTypeRequest {
 
-    @NotBlank(message = "SSD_INTERFACE_ENTITY_ID_REQUIRED")
+    @NotBlank(message = "INTERFACE_TYPE_ENTITY_ID_REQUIRED")
     String id;
 
-    @NotBlank(message = "SSD_INTERFACE_NAME_REQUIRED")
+    @NotBlank(message = "INTERFACE_TYPE_NAME_REQUIRED")
     String name;
 }
+

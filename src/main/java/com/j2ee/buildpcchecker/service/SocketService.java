@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.SocketRequest;
 import com.j2ee.buildpcchecker.dto.response.SocketResponse;
 import com.j2ee.buildpcchecker.entity.Socket;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.SocketMapper;
 import com.j2ee.buildpcchecker.repository.SocketRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class SocketService {
         // Check if socket already exists
         if (socketRepository.existsById(request.getId())) {
             log.error("Socket already exists with ID: {}", request.getId());
-            throw new RuntimeException("Socket already exists with id: " + request.getId());
+            throw new AppException(ErrorCode.SOCKET_ALREADY_EXISTS);
         }
 
         Socket socket = socketMapper.toSocket(request);
@@ -63,7 +65,7 @@ public class SocketService {
         Socket socket = socketRepository.findById(socketId)
                 .orElseThrow(() -> {
                     log.error("Socket not found with ID: {}", socketId);
-                    return new RuntimeException("Socket not found with id: " + socketId);
+                    return new AppException(ErrorCode.SOCKET_NOT_FOUND);
                 });
 
         return socketMapper.toSocketResponse(socket);
@@ -81,7 +83,7 @@ public class SocketService {
         Socket socket = socketRepository.findById(socketId)
                 .orElseThrow(() -> {
                     log.error("Socket not found with ID: {}", socketId);
-                    return new RuntimeException("Socket not found with id: " + socketId);
+                    return new AppException(ErrorCode.SOCKET_NOT_FOUND);
                 });
 
         socketMapper.updateSocket(socket, request);
@@ -101,7 +103,7 @@ public class SocketService {
         Socket socket = socketRepository.findById(socketId)
                 .orElseThrow(() -> {
                     log.error("Socket not found with ID: {}", socketId);
-                    return new RuntimeException("Socket not found with id: " + socketId);
+                    return new AppException(ErrorCode.SOCKET_NOT_FOUND);
                 });
 
         socketRepository.delete(socket);

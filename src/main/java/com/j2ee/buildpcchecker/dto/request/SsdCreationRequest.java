@@ -18,11 +18,11 @@ public class SsdCreationRequest {
     @NotBlank(message = "SSD_TYPE_ID_REQUIRED")
     String ssdTypeId; // SATA / NVME
 
-    @NotBlank(message = "SSD_FORM_FACTOR_REQUIRED")
-    String formFactor; // 2.5", M.2 2280
+    @NotBlank(message = "FORM_FACTOR_ID_REQUIRED")
+    String formFactorId; // FF_2_5 / M2_2280
 
-    @NotBlank(message = "SSD_INTERFACE_ID_REQUIRED")
-    String ssdInterfaceId; // SATA_3 / PCIE_4 / PCIE_5
+    @NotBlank(message = "INTERFACE_TYPE_ID_REQUIRED")
+    String interfaceTypeId; // SATA_3 / PCIE_4 / PCIE_5
 
     @NotNull(message = "SSD_CAPACITY_REQUIRED")
     Integer capacity; // GB

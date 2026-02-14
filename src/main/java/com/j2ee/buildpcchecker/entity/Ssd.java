@@ -25,12 +25,13 @@ public class Ssd {
     @JoinColumn(name = "ssd_type_id", nullable = false)
     SsdType ssdType; // SATA / NVME
 
-    @Column(name = "form_factor", nullable = false)
-    String formFactor; // 2.5", M.2 2280
+    @ManyToOne
+    @JoinColumn(name = "form_factor_id", nullable = false)
+    FormFactor formFactor; // 2.5", M.2 2280
 
     @ManyToOne
-    @JoinColumn(name = "ssd_interface_id", nullable = false)
-    SsdInterface ssdInterface; // SATA III / PCIe 3.0 / PCIe 4.0
+    @JoinColumn(name = "interface_type_id", nullable = false)
+    InterfaceType interfaceType; // SATA III / PCIe 3.0 / PCIe 4.0
 
     @Column(nullable = false)
     Integer capacity; // GB

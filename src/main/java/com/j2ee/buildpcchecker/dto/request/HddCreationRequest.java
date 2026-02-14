@@ -15,11 +15,11 @@ public class HddCreationRequest {
     @NotBlank(message = "HDD_NAME_REQUIRED")
     String name;
 
-    @NotBlank(message = "HDD_FORM_FACTOR_REQUIRED")
-    String formFactor; // 3.5" / 2.5"
+    @NotBlank(message = "FORM_FACTOR_ID_REQUIRED")
+    String formFactorId; // FF_2_5 / FF_3_5
 
-    @NotBlank(message = "HDD_INTERFACE_ID_REQUIRED")
-    String hddInterfaceId; // SATA_3 / SAS
+    @NotBlank(message = "INTERFACE_TYPE_ID_REQUIRED")
+    String interfaceTypeId; // SATA_3 / SAS
 
     @NotNull(message = "HDD_CAPACITY_REQUIRED")
     Integer capacity; // GB

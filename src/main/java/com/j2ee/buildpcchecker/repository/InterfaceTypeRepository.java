@@ -1,9 +1,10 @@
 package com.j2ee.buildpcchecker.repository;
 
-import com.j2ee.buildpcchecker.entity.SsdInterface;
+import com.j2ee.buildpcchecker.entity.InterfaceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SsdInterfaceRepository extends JpaRepository<SsdInterface, String> {
+public interface InterfaceTypeRepository extends JpaRepository<InterfaceType, String> {
 }
+

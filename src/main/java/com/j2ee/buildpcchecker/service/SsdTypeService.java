@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.SsdTypeRequest;
 import com.j2ee.buildpcchecker.dto.response.SsdTypeResponse;
 import com.j2ee.buildpcchecker.entity.SsdType;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.SsdTypeMapper;
 import com.j2ee.buildpcchecker.repository.SsdTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ public class SsdTypeService {
         log.info("Creating new SSD Type: {}", request.getId());
 
         if (ssdTypeRepository.existsById(request.getId())) {
-            throw new RuntimeException("SSD Type already exists with id: " + request.getId());
+            throw new AppException(ErrorCode.SSD_TYPE_ALREADY_EXISTS);
         }
 
         SsdType ssdType = ssdTypeMapper.toSsdType(request);
@@ -47,7 +49,7 @@ public class SsdTypeService {
         SsdType ssdType = ssdTypeRepository.findById(ssdTypeId)
                 .orElseThrow(() -> {
                     log.error("SSD Type not found with ID: {}", ssdTypeId);
-                    return new RuntimeException("SSD Type not found with id: " + ssdTypeId);
+                    return new AppException(ErrorCode.SSD_TYPE_NOT_FOUND);
                 });
 
         return ssdTypeMapper.toSsdTypeResponse(ssdType);
@@ -59,7 +61,7 @@ public class SsdTypeService {
         SsdType ssdType = ssdTypeRepository.findById(ssdTypeId)
                 .orElseThrow(() -> {
                     log.error("SSD Type not found with ID: {}", ssdTypeId);
-                    return new RuntimeException("SSD Type not found with id: " + ssdTypeId);
+                    return new AppException(ErrorCode.SSD_TYPE_NOT_FOUND);
                 });
 
         ssdTypeMapper.updateSsdType(ssdType, request);
@@ -75,7 +77,7 @@ public class SsdTypeService {
         SsdType ssdType = ssdTypeRepository.findById(ssdTypeId)
                 .orElseThrow(() -> {
                     log.error("SSD Type not found with ID: {}", ssdTypeId);
-                    return new RuntimeException("SSD Type not found with id: " + ssdTypeId);
+                    return new AppException(ErrorCode.SSD_TYPE_NOT_FOUND);
                 });
 
         ssdTypeRepository.delete(ssdType);

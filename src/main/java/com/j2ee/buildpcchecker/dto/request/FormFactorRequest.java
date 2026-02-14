@@ -9,11 +9,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HddInterfaceRequest {
+public class FormFactorRequest {
 
-    @NotBlank(message = "HDD_INTERFACE_ENTITY_ID_REQUIRED")
+    @NotBlank(message = "FORM_FACTOR_ID_REQUIRED")
     String id;
 
-    @NotBlank(message = "HDD_INTERFACE_NAME_REQUIRED")
+    @NotBlank(message = "FORM_FACTOR_NAME_REQUIRED")
     String name;
 }
+

@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.PcieConnectorRequest;
 import com.j2ee.buildpcchecker.dto.response.PcieConnectorResponse;
 import com.j2ee.buildpcchecker.entity.PcieConnector;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.PcieConnectorMapper;
 import com.j2ee.buildpcchecker.repository.PcieConnectorRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ public class PcieConnectorService {
         log.info("Creating new PCIe Connector: {}", request.getId());
 
         if (pcieConnectorRepository.existsById(request.getId())) {
-            throw new RuntimeException("PCIe Connector already exists with id: " + request.getId());
+            throw new AppException(ErrorCode.PCIE_CONNECTOR_ALREADY_EXISTS);
         }
 
         PcieConnector pcieConnector = pcieConnectorMapper.toPcieConnector(request);
@@ -47,7 +49,7 @@ public class PcieConnectorService {
         PcieConnector pcieConnector = pcieConnectorRepository.findById(pcieConnectorId)
                 .orElseThrow(() -> {
                     log.error("PCIe Connector not found with ID: {}", pcieConnectorId);
-                    return new RuntimeException("PCIe Connector not found with id: " + pcieConnectorId);
+                    return new AppException(ErrorCode.PCIE_CONNECTOR_NOT_FOUND);
                 });
 
         return pcieConnectorMapper.toPcieConnectorResponse(pcieConnector);
@@ -59,7 +61,7 @@ public class PcieConnectorService {
         PcieConnector pcieConnector = pcieConnectorRepository.findById(pcieConnectorId)
                 .orElseThrow(() -> {
                     log.error("PCIe Connector not found with ID: {}", pcieConnectorId);
-                    return new RuntimeException("PCIe Connector not found with id: " + pcieConnectorId);
+                    return new AppException(ErrorCode.PCIE_CONNECTOR_NOT_FOUND);
                 });
 
         pcieConnectorMapper.updatePcieConnector(pcieConnector, request);
@@ -75,7 +77,7 @@ public class PcieConnectorService {
         PcieConnector pcieConnector = pcieConnectorRepository.findById(pcieConnectorId)
                 .orElseThrow(() -> {
                     log.error("PCIe Connector not found with ID: {}", pcieConnectorId);
-                    return new RuntimeException("PCIe Connector not found with id: " + pcieConnectorId);
+                    return new AppException(ErrorCode.PCIE_CONNECTOR_NOT_FOUND);
                 });
 
         pcieConnectorRepository.delete(pcieConnector);

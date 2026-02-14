@@ -12,8 +12,8 @@ public class HddResponse {
 
     String id;
     String name;
-    String formFactor;
-    HddInterfaceResponse hddInterface;
+    FormFactorResponse formFactor;
+    InterfaceTypeResponse interfaceType;
     Integer capacity;
     Integer tdp;
     String description;

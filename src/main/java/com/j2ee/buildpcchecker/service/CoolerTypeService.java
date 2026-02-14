@@ -3,6 +3,8 @@ package com.j2ee.buildpcchecker.service;
 import com.j2ee.buildpcchecker.dto.request.CoolerTypeRequest;
 import com.j2ee.buildpcchecker.dto.response.CoolerTypeResponse;
 import com.j2ee.buildpcchecker.entity.CoolerType;
+import com.j2ee.buildpcchecker.exception.AppException;
+import com.j2ee.buildpcchecker.exception.ErrorCode;
 import com.j2ee.buildpcchecker.mapper.CoolerTypeMapper;
 import com.j2ee.buildpcchecker.repository.CoolerTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +27,7 @@ public class CoolerTypeService {
         log.info("Creating new Cooler Type: {}", request.getId());
 
         if (coolerTypeRepository.existsById(request.getId())) {
-            throw new RuntimeException("Cooler Type already exists with id: " + request.getId());
+            throw new AppException(ErrorCode.COOLER_TYPE_ALREADY_EXISTS);
         }
 
         CoolerType coolerType = coolerTypeMapper.toCoolerType(request);
@@ -47,7 +49,7 @@ public class CoolerTypeService {
         CoolerType coolerType = coolerTypeRepository.findById(coolerTypeId)
                 .orElseThrow(() -> {
                     log.error("Cooler Type not found with ID: {}", coolerTypeId);
-                    return new RuntimeException("Cooler Type not found with id: " + coolerTypeId);
+                    return new AppException(ErrorCode.COOLER_TYPE_NOT_FOUND);
                 });
 
         return coolerTypeMapper.toCoolerTypeResponse(coolerType);
@@ -59,7 +61,7 @@ public class CoolerTypeService {
         CoolerType coolerType = coolerTypeRepository.findById(coolerTypeId)
                 .orElseThrow(() -> {
                     log.error("Cooler Type not found with ID: {}", coolerTypeId);
-                    return new RuntimeException("Cooler Type not found with id: " + coolerTypeId);
+                    return new AppException(ErrorCode.COOLER_TYPE_NOT_FOUND);
                 });
 
         coolerTypeMapper.updateCoolerType(coolerType, request);
@@ -75,7 +77,7 @@ public class CoolerTypeService {
         CoolerType coolerType = coolerTypeRepository.findById(coolerTypeId)
                 .orElseThrow(() -> {
                     log.error("Cooler Type not found with ID: {}", coolerTypeId);
-                    return new RuntimeException("Cooler Type not found with id: " + coolerTypeId);
+                    return new AppException(ErrorCode.COOLER_TYPE_NOT_FOUND);
                 });
 
         coolerTypeRepository.delete(coolerType);

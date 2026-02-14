@@ -13,7 +13,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface HddMapper {
 
-    @Mapping(target = "hddInterface", ignore = true) // Will be set manually in service
+    @Mapping(target = "formFactor", ignore = true) // Will be set manually in service
+    @Mapping(target = "interfaceType", ignore = true) // Will be set manually in service
     @Mapping(target = "id", ignore = true)
     Hdd toHdd(HddCreationRequest request);
 
@@ -21,7 +22,8 @@ public interface HddMapper {
 
     List<HddResponse> toListHddResponse(List<Hdd> hdds);
 
-    @Mapping(target = "hddInterface", ignore = true) // Will be set manually in service if needed
+    @Mapping(target = "formFactor", ignore = true) // Will be set manually in service if needed
+    @Mapping(target = "interfaceType", ignore = true) // Will be set manually in service if needed
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     void updateHdd(@MappingTarget Hdd hdd, HddUpdateRequest request);

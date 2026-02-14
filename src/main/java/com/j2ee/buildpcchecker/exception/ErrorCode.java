@@ -66,16 +66,19 @@ public enum ErrorCode
     SOCKET_ID_REQUIRED(2401, "Socket ID is required", HttpStatus.BAD_REQUEST),
     SOCKET_NAME_REQUIRED(2402, "Socket name is required", HttpStatus.BAD_REQUEST),
     SOCKET_NOT_FOUND(2403, "Socket not found", HttpStatus.NOT_FOUND),
+    SOCKET_ALREADY_EXISTS(2404, "Socket already exists", HttpStatus.BAD_REQUEST),
 
     // RamType validation errors (2501-2599)
     RAM_TYPE_ID_VALUE_REQUIRED(2501, "RAM Type ID is required", HttpStatus.BAD_REQUEST),
     RAM_TYPE_NAME_REQUIRED(2502, "RAM Type name is required", HttpStatus.BAD_REQUEST),
     RAM_TYPE_NOT_FOUND(2503, "RAM Type not found", HttpStatus.NOT_FOUND),
+    RAM_TYPE_ALREADY_EXISTS(2504, "RAM Type already exists", HttpStatus.BAD_REQUEST),
 
     // PcieVersion validation errors (2601-2699)
     PCIE_VERSION_ID_REQUIRED(2601, "PCIe Version ID is required", HttpStatus.BAD_REQUEST),
     PCIE_VERSION_NAME_REQUIRED(2602, "PCIe Version name is required", HttpStatus.BAD_REQUEST),
     PCIE_VERSION_NOT_FOUND(2603, "PCIe Version not found", HttpStatus.NOT_FOUND),
+    PCIE_VERSION_ALREADY_EXISTS(2604, "PCIe Version already exists", HttpStatus.BAD_REQUEST),
 
     // SSD validation errors (2701-2799)
     SSD_NAME_REQUIRED(2701, "SSD name is required", HttpStatus.BAD_REQUEST),
@@ -91,6 +94,7 @@ public enum ErrorCode
     SSD_TYPE_ENTITY_ID_REQUIRED(2711, "SSD Type ID is required", HttpStatus.BAD_REQUEST),
     SSD_TYPE_NAME_REQUIRED(2712, "SSD Type name is required", HttpStatus.BAD_REQUEST),
     SSD_TYPE_NOT_FOUND(2713, "SSD Type not found", HttpStatus.NOT_FOUND),
+    SSD_TYPE_ALREADY_EXISTS(2714, "SSD Type already exists", HttpStatus.BAD_REQUEST),
 
     // SsdInterface validation errors (2721-2729)
     SSD_INTERFACE_ENTITY_ID_REQUIRED(2721, "SSD Interface ID is required", HttpStatus.BAD_REQUEST),
@@ -123,6 +127,7 @@ public enum ErrorCode
     PCIE_CONNECTOR_ID_REQUIRED(2911, "PCIe Connector ID is required", HttpStatus.BAD_REQUEST),
     PCIE_CONNECTOR_NAME_REQUIRED(2912, "PCIe Connector name is required", HttpStatus.BAD_REQUEST),
     PCIE_CONNECTOR_NOT_FOUND(2913, "PCIe Connector not found", HttpStatus.NOT_FOUND),
+    PCIE_CONNECTOR_ALREADY_EXISTS(2914, "PCIe Connector already exists", HttpStatus.BAD_REQUEST),
 
     // PCCase validation errors (3001-3099)
     CASE_NAME_REQUIRED(3001, "Case name is required", HttpStatus.BAD_REQUEST),
@@ -145,7 +150,20 @@ public enum ErrorCode
     // CoolerType validation errors (3111-3119)
     COOLER_TYPE_ENTITY_ID_REQUIRED(3111, "Cooler Type ID is required", HttpStatus.BAD_REQUEST),
     COOLER_TYPE_NAME_REQUIRED(3112, "Cooler Type name is required", HttpStatus.BAD_REQUEST),
-    COOLER_TYPE_NOT_FOUND(3113, "Cooler Type not found", HttpStatus.NOT_FOUND)
+    COOLER_TYPE_NOT_FOUND(3113, "Cooler Type not found", HttpStatus.NOT_FOUND),
+    COOLER_TYPE_ALREADY_EXISTS(3114, "Cooler Type already exists", HttpStatus.BAD_REQUEST),
+
+    // InterfaceType validation errors (3121-3129)
+    INTERFACE_TYPE_ENTITY_ID_REQUIRED(3121, "Interface Type ID is required", HttpStatus.BAD_REQUEST),
+    INTERFACE_TYPE_NAME_REQUIRED(3122, "Interface Type name is required", HttpStatus.BAD_REQUEST),
+    INTERFACE_TYPE_NOT_FOUND(3123, "Interface Type not found", HttpStatus.NOT_FOUND),
+    INTERFACE_TYPE_ALREADY_EXISTS(3124, "Interface Type already exists", HttpStatus.BAD_REQUEST),
+
+    // FormFactor validation errors (3131-3139)
+    FORM_FACTOR_ID_REQUIRED(3131, "Form Factor ID is required", HttpStatus.BAD_REQUEST),
+    FORM_FACTOR_NAME_REQUIRED(3132, "Form Factor name is required", HttpStatus.BAD_REQUEST),
+    FORM_FACTOR_NOT_FOUND(3133, "Form Factor not found", HttpStatus.NOT_FOUND),
+    FORM_FACTOR_ALREADY_EXISTS(3134, "Form Factor already exists", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
