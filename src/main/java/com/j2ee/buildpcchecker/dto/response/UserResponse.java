@@ -22,5 +22,7 @@ public class UserResponse
     String lastname;
     String email;
     LocalDate dateOfBirth;
+    Boolean enabled;
+    Boolean emailVerified;
     Set<RoleResponse> roles;
 }
