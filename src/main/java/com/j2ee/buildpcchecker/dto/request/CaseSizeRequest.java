@@ -1,5 +1,6 @@
 package com.j2ee.buildpcchecker.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,14 +9,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CaseUpdateRequest {
+public class CaseSizeRequest {
 
+    @NotBlank(message = "CASE_SIZE_ID_REQUIRED")
+    String id;
+
+    @NotBlank(message = "CASE_SIZE_NAME_REQUIRED")
     String name;
-    String sizeId;
-    Integer maxVgaLengthMm;
-    Integer maxCoolerHeightMm;
-    Integer maxRadiatorSize;
-    Integer drive35Slot;
-    Integer drive25Slot;
-    String description;
 }
+

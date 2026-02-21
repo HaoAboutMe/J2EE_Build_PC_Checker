@@ -8,15 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CaseResponse {
+public class CaseSizeResponse {
 
     String id;
     String name;
-    CaseSizeResponse size;
-    Integer maxVgaLengthMm;
-    Integer maxCoolerHeightMm;
-    Integer maxRadiatorSize;
-    Integer drive35Slot;
-    Integer drive25Slot;
-    String description;
 }
+
