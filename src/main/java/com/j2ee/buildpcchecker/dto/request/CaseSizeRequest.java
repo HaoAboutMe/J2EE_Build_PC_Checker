@@ -1,21 +1,20 @@
 package com.j2ee.buildpcchecker.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PsuUpdateRequest {
+public class CaseSizeRequest {
 
+    @NotBlank(message = "CASE_SIZE_ID_REQUIRED")
+    String id;
+
+    @NotBlank(message = "CASE_SIZE_NAME_REQUIRED")
     String name;
-    Integer wattage;
-    String efficiency;
-    Set<String> pcieConnectorIds;
-    Integer sataConnector;
-    String description;
 }
+
