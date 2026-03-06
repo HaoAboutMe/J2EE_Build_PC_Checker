@@ -3,6 +3,7 @@ package com.j2ee.buildpcchecker.exception;
 import com.j2ee.buildpcchecker.dto.request.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -93,6 +94,107 @@ public class GlobalExceptionHandler
         apiResponse.setMessage("Malformed JSON request");
 
         return ResponseEntity.badRequest().body(apiResponse);
+    }
+
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    ResponseEntity<ApiResponse> handlingDataIntegrityViolationException(DataIntegrityViolationException exception)
+    {
+        ErrorCode errorCode = determineErrorCodeFromConstraintViolation(exception);
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity
+                .status(errorCode.getStatusCode())
+                .body(apiResponse);
+    }
+
+    /**
+     * Determine specific error code based on the constraint violation message
+     */
+    private ErrorCode determineErrorCodeFromConstraintViolation(DataIntegrityViolationException exception)
+    {
+        String message = exception.getMessage();
+        if (message == null) {
+            return ErrorCode.FOREIGN_KEY_VIOLATION;
+        }
+
+        String lowerMessage = message.toLowerCase();
+
+        // Socket constraints
+        if (lowerMessage.contains("socket_id")) {
+            if (lowerMessage.contains("cpu")) {
+                return ErrorCode.SOCKET_IN_USE_BY_CPU;
+            } else if (lowerMessage.contains("mainboard")) {
+                return ErrorCode.SOCKET_IN_USE_BY_MAINBOARD;
+            }
+        }
+
+        // RAM Type constraints
+        if (lowerMessage.contains("ram_type_id")) {
+            if (lowerMessage.contains("ram") && !lowerMessage.contains("mainboard")) {
+                return ErrorCode.RAM_TYPE_IN_USE_BY_RAM;
+            } else if (lowerMessage.contains("mainboard")) {
+                return ErrorCode.RAM_TYPE_IN_USE_BY_MAINBOARD;
+            }
+        }
+
+        // PCIe Version constraints
+        if (lowerMessage.contains("pcie_version_id")) {
+            if (lowerMessage.contains("cpu")) {
+                return ErrorCode.PCIE_VERSION_IN_USE_BY_CPU;
+            } else if (lowerMessage.contains("mainboard")) {
+                return ErrorCode.PCIE_VERSION_IN_USE_BY_MAINBOARD;
+            } else if (lowerMessage.contains("vga")) {
+                return ErrorCode.PCIE_VERSION_IN_USE_BY_VGA;
+            }
+        }
+
+        // SSD Type constraints
+        if (lowerMessage.contains("ssd_type_id")) {
+            return ErrorCode.SSD_TYPE_IN_USE;
+        }
+
+        // Interface Type constraints
+        if (lowerMessage.contains("interface_type_id") || lowerMessage.contains("interface_id")) {
+            if (lowerMessage.contains("ssd")) {
+                return ErrorCode.INTERFACE_TYPE_IN_USE_BY_SSD;
+            } else if (lowerMessage.contains("hdd")) {
+                return ErrorCode.INTERFACE_TYPE_IN_USE_BY_HDD;
+            }
+        }
+
+        // Form Factor constraints
+        if (lowerMessage.contains("form_factor_id") || lowerMessage.contains("form_factor")) {
+            if (lowerMessage.contains("ssd")) {
+                return ErrorCode.FORM_FACTOR_IN_USE_BY_SSD;
+            } else if (lowerMessage.contains("hdd")) {
+                return ErrorCode.FORM_FACTOR_IN_USE_BY_HDD;
+            }
+        }
+
+        // Cooler Type constraints
+        if (lowerMessage.contains("cooler_type_id")) {
+            return ErrorCode.COOLER_TYPE_IN_USE;
+        }
+
+        // Case Size constraints
+        if (lowerMessage.contains("size_id") || lowerMessage.contains("case_size_id")) {
+            if (lowerMessage.contains("mainboard")) {
+                return ErrorCode.CASE_SIZE_IN_USE_BY_MAINBOARD;
+            } else if (lowerMessage.contains("case") || lowerMessage.contains("pccase")) {
+                return ErrorCode.CASE_SIZE_IN_USE_BY_CASE;
+            }
+        }
+
+        // PCIe Connector constraints
+        if (lowerMessage.contains("pcie_connector_id")) {
+            return ErrorCode.PCIE_CONNECTOR_IN_USE;
+        }
+
+        // Default foreign key violation
+        return ErrorCode.FOREIGN_KEY_VIOLATION;
     }
 
     private String mapAttribute(String message, Map<String, Object> attributes)
