@@ -1,10 +1,13 @@
 package com.j2ee.buildpcchecker.controller;
 
+import com.j2ee.buildpcchecker.dto.request.AnalyzeBuildRequest;
 import com.j2ee.buildpcchecker.dto.request.ApiResponse;
 import com.j2ee.buildpcchecker.dto.request.BuildCheckRequest;
 import com.j2ee.buildpcchecker.dto.request.SaveBuildRequest;
+import com.j2ee.buildpcchecker.dto.response.BuildAnalysisResponse;
 import com.j2ee.buildpcchecker.dto.response.CompatibilityResult;
 import com.j2ee.buildpcchecker.dto.response.PcBuildResponse;
+import com.j2ee.buildpcchecker.service.BuildAnalyzerService;
 import com.j2ee.buildpcchecker.service.BuildService;
 import com.j2ee.buildpcchecker.service.CompatibilityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +36,8 @@ public class BuildController {
 
     CompatibilityService compatibilityService;
     BuildService buildService;
+    BuildAnalyzerService buildAnalyzerService;
+
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(
                     responseCode = "200",
@@ -250,6 +255,47 @@ public class BuildController {
                 .message("Build deleted successfully")
                 .build();
     }
+
+    /**
+     * Analyze PC build for bottleneck and power consumption
+     * POST /builds/analyze
+     */
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "Build analysis completed successfully",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ApiResponse.class),
+                    examples = @ExampleObject(
+                            name = "Analysis Result",
+                            value = """
+                                    {
+                                      "code": 1000,
+                                      "message": "Success",
+                                      "result": {
+                                        "bottleneck": 12.3,
+                                        "balanceStatus": "Good Balance",
+                                        "estimatedWattage": 450
+                                      }
+                                    }
+                                    """
+                    )
+            )
+    )
+    @PostMapping("/analyze")
+    public ApiResponse<BuildAnalysisResponse> analyzeBuild(@RequestBody @Valid AnalyzeBuildRequest request) {
+        log.info("Analyzing build - CPU: {}, GPU: {}, RAM: {}, SSD: {}",
+                request.getCpuId(), request.getGpuId(), request.getRamId(), request.getSsdId());
+
+        BuildAnalysisResponse analysisResult = buildAnalyzerService.analyzeBuild(request);
+
+        return ApiResponse.<BuildAnalysisResponse>builder()
+                .result(analysisResult)
+                .build();
+    }
 }
+
+
+
 
 

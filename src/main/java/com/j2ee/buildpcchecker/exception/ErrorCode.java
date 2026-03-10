@@ -197,7 +197,13 @@ public enum ErrorCode
     // PC Build validation errors (5001-5099)
     BUILD_NAME_REQUIRED(5001, "Build name is required", HttpStatus.BAD_REQUEST),
     BUILD_NOT_FOUND(5002, "Build not found", HttpStatus.NOT_FOUND),
-    BUILD_UNAUTHORIZED_ACCESS(5003, "You don't have permission to access this build", HttpStatus.FORBIDDEN)
+    BUILD_UNAUTHORIZED_ACCESS(5003, "You don't have permission to access this build", HttpStatus.FORBIDDEN),
+
+    // Build Analysis errors (6001-6099)
+    CPU_ID_REQUIRED(6001, "CPU ID is required", HttpStatus.BAD_REQUEST),
+    GPU_ID_REQUIRED(6002, "GPU ID is required", HttpStatus.BAD_REQUEST),
+    RAM_ID_REQUIRED(6003, "RAM ID is required", HttpStatus.BAD_REQUEST),
+    SSD_ID_REQUIRED(6004, "SSD ID is required", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
