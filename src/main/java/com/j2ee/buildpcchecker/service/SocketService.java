@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.SocketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class SocketService {
      * @param request Socket creation request
      * @return SocketResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public SocketResponse createSocket(SocketRequest request) {
         log.info("Creating new Socket: {}", request.getId());
 
@@ -77,6 +79,7 @@ public class SocketService {
      * @param socketId Socket ID
      * @return SocketResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public SocketResponse updateSocket(SocketRequest request, String socketId) {
         log.info("Updating Socket with ID: {}", socketId);
 
@@ -97,6 +100,7 @@ public class SocketService {
      * Delete Socket by ID
      * @param socketId Socket ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSocket(String socketId) {
         log.info("Deleting Socket with ID: {}", socketId);
 

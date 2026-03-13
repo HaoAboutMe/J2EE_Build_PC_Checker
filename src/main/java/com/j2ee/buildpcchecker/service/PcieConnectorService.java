@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.PcieConnectorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class PcieConnectorService {
     PcieConnectorRepository pcieConnectorRepository;
     PcieConnectorMapper pcieConnectorMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public PcieConnectorResponse createPcieConnector(PcieConnectorRequest request) {
         log.info("Creating new PCIe Connector: {}", request.getId());
 
@@ -55,6 +57,7 @@ public class PcieConnectorService {
         return pcieConnectorMapper.toPcieConnectorResponse(pcieConnector);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public PcieConnectorResponse updatePcieConnector(PcieConnectorRequest request, String pcieConnectorId) {
         log.info("Updating PCIe Connector with ID: {}", pcieConnectorId);
 
@@ -71,6 +74,7 @@ public class PcieConnectorService {
         return pcieConnectorMapper.toPcieConnectorResponse(updatedPcieConnector);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deletePcieConnector(String pcieConnectorId) {
         log.info("Deleting PCIe Connector with ID: {}", pcieConnectorId);
 

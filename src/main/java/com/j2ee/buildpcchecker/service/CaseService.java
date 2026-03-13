@@ -13,6 +13,7 @@ import com.j2ee.buildpcchecker.repository.CaseSizeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class CaseService {
      * @param request Case creation request
      * @return CaseResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CaseResponse createCase(CaseCreationRequest request) {
         log.info("Creating new Case: {}", request.getName());
 
@@ -90,6 +92,7 @@ public class CaseService {
      * @param caseId Case ID
      * @return CaseResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CaseResponse updateCase(CaseUpdateRequest request, String caseId) {
         log.info("Updating Case with ID: {}", caseId);
 
@@ -120,6 +123,7 @@ public class CaseService {
      * Delete Case by ID
      * @param caseId Case ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCase(String caseId) {
         log.info("Deleting Case with ID: {}", caseId);
 

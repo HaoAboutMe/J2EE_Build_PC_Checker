@@ -15,6 +15,7 @@ import com.j2ee.buildpcchecker.repository.SocketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class CpuService {
      * @param request CPU creation request
      * @return CpuResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CpuResponse createCpu(CpuCreationRequest request) {
         log.info("Creating new CPU: {}", request.getName());
 
@@ -101,6 +103,7 @@ public class CpuService {
      * @param cpuId CPU ID
      * @return CpuResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CpuResponse updateCpu(CpuUpdateRequest request, String cpuId) {
         log.info("Updating CPU with ID: {}", cpuId);
 
@@ -142,6 +145,7 @@ public class CpuService {
      * Delete CPU by ID
      * @param cpuId CPU ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCpu(String cpuId) {
         log.info("Deleting CPU with ID: {}", cpuId);
 
@@ -155,4 +159,3 @@ public class CpuService {
         log.info("CPU deleted successfully with ID: {}", cpuId);
     }
 }
-
