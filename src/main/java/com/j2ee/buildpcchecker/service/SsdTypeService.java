@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.SsdTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class SsdTypeService {
     SsdTypeRepository ssdTypeRepository;
     SsdTypeMapper ssdTypeMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SsdTypeResponse createSsdType(SsdTypeRequest request) {
         log.info("Creating new SSD Type: {}", request.getId());
 
@@ -55,6 +57,7 @@ public class SsdTypeService {
         return ssdTypeMapper.toSsdTypeResponse(ssdType);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SsdTypeResponse updateSsdType(SsdTypeRequest request, String ssdTypeId) {
         log.info("Updating SSD Type with ID: {}", ssdTypeId);
 
@@ -71,6 +74,7 @@ public class SsdTypeService {
         return ssdTypeMapper.toSsdTypeResponse(updatedSsdType);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSsdType(String ssdTypeId) {
         log.info("Deleting SSD Type with ID: {}", ssdTypeId);
 

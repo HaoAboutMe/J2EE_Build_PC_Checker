@@ -15,6 +15,7 @@ import com.j2ee.buildpcchecker.repository.VgaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class VgaService {
      * @param request VGA creation request
      * @return VgaResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public VgaResponse createVga(VgaCreationRequest request) {
         log.info("Creating new VGA: {}", request.getName());
 
@@ -103,6 +105,7 @@ public class VgaService {
      * @param vgaId VGA ID
      * @return VgaResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public VgaResponse updateVga(VgaUpdateRequest request, String vgaId) {
         log.info("Updating VGA with ID: {}", vgaId);
 
@@ -144,6 +147,7 @@ public class VgaService {
      * Delete VGA by ID
      * @param vgaId VGA ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteVga(String vgaId) {
         log.info("Deleting VGA with ID: {}", vgaId);
 

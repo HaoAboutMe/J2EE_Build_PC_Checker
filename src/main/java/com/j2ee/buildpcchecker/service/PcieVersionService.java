@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.PcieVersionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class PcieVersionService {
      * @param request PCIe Version creation request
      * @return PcieVersionResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public PcieVersionResponse createPcieVersion(PcieVersionRequest request) {
         log.info("Creating new PCIe Version: {}", request.getId());
 
@@ -77,6 +79,7 @@ public class PcieVersionService {
      * @param pcieVersionId PCIe Version ID
      * @return PcieVersionResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public PcieVersionResponse updatePcieVersion(PcieVersionRequest request, String pcieVersionId) {
         log.info("Updating PCIe Version with ID: {}", pcieVersionId);
 
@@ -97,6 +100,7 @@ public class PcieVersionService {
      * Delete PCIe Version by ID
      * @param pcieVersionId PCIe Version ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deletePcieVersion(String pcieVersionId) {
         log.info("Deleting PCIe Version with ID: {}", pcieVersionId);
 

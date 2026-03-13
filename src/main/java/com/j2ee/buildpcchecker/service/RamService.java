@@ -13,6 +13,7 @@ import com.j2ee.buildpcchecker.repository.RamTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class RamService {
      * @param request RAM creation request
      * @return RamResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public RamResponse createRam(RamCreationRequest request) {
         log.info("Creating new RAM: {}", request.getName());
 
@@ -90,6 +92,7 @@ public class RamService {
      * @param ramId RAM ID
      * @return RamResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public RamResponse updateRam(RamUpdateRequest request, String ramId) {
         log.info("Updating RAM with ID: {}", ramId);
 
@@ -121,6 +124,7 @@ public class RamService {
      * Delete RAM by ID
      * @param ramId RAM ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteRam(String ramId) {
         log.info("Deleting RAM with ID: {}", ramId);
 
