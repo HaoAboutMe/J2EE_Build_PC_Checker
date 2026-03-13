@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.FormFactorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class FormFactorService {
     FormFactorRepository formFactorRepository;
     FormFactorMapper formFactorMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public FormFactorResponse createFormFactor(FormFactorRequest request) {
         log.info("Creating new Form Factor: {}", request.getId());
 
@@ -55,6 +57,7 @@ public class FormFactorService {
         return formFactorMapper.toFormFactorResponse(formFactor);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public FormFactorResponse updateFormFactor(FormFactorRequest request, String formFactorId) {
         log.info("Updating Form Factor with ID: {}", formFactorId);
 
@@ -71,6 +74,7 @@ public class FormFactorService {
         return formFactorMapper.toFormFactorResponse(updatedFormFactor);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteFormFactor(String formFactorId) {
         log.info("Deleting Form Factor with ID: {}", formFactorId);
 
@@ -84,4 +88,3 @@ public class FormFactorService {
         log.info("Form Factor deleted successfully with ID: {}", formFactorId);
     }
 }
-

@@ -13,6 +13,7 @@ import com.j2ee.buildpcchecker.repository.CoolerTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class CoolerService {
      * @param request Cooler creation request
      * @return CoolerResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CoolerResponse createCooler(CoolerCreationRequest request) {
         log.info("Creating new Cooler: {}", request.getName());
 
@@ -90,6 +92,7 @@ public class CoolerService {
      * @param coolerId Cooler ID
      * @return CoolerResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public CoolerResponse updateCooler(CoolerUpdateRequest request, String coolerId) {
         log.info("Updating Cooler with ID: {}", coolerId);
 
@@ -121,6 +124,7 @@ public class CoolerService {
      * Delete Cooler by ID
      * @param coolerId Cooler ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCooler(String coolerId) {
         log.info("Deleting Cooler with ID: {}", coolerId);
 

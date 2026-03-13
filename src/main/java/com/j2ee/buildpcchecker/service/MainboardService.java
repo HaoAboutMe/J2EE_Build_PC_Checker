@@ -19,6 +19,7 @@ import com.j2ee.buildpcchecker.repository.SocketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class MainboardService {
      * @param request Mainboard creation request
      * @return MainboardResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public MainboardResponse createMainboard(MainboardCreationRequest request) {
         log.info("Creating new Mainboard: {}", request.getName());
 
@@ -123,6 +125,7 @@ public class MainboardService {
      * @param mainboardId Mainboard ID
      * @return MainboardResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public MainboardResponse updateMainboard(MainboardUpdateRequest request, String mainboardId) {
         log.info("Updating Mainboard with ID: {}", mainboardId);
 
@@ -184,6 +187,7 @@ public class MainboardService {
      * Delete Mainboard by ID
      * @param mainboardId Mainboard ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteMainboard(String mainboardId) {
         log.info("Deleting Mainboard with ID: {}", mainboardId);
 
@@ -197,4 +201,3 @@ public class MainboardService {
         log.info("Mainboard deleted successfully with ID: {}", mainboardId);
     }
 }
-

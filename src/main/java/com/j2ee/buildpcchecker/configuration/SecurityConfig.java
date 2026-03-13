@@ -25,6 +25,27 @@ public class SecurityConfig {
             "/auth/verify-email", "/auth/resend-verification"
     };
 
+    private final String[] COMPONENT_ENDPOINTS = {
+            "/cpus", "/cpus/**",
+            "/mainboards", "/mainboards/**",
+            "/rams", "/rams/**",
+            "/vgas", "/vgas/**",
+            "/ssds", "/ssds/**",
+            "/hdds", "/hdds/**",
+            "/psus", "/psus/**",
+            "/coolers", "/coolers/**",
+            "/cases", "/cases/**",
+            "/sockets", "/sockets/**",
+            "/ram-types", "/ram-types/**",
+            "/ssd-types", "/ssd-types/**",
+            "/interface-types", "/interface-types/**",
+            "/form-factors", "/form-factors/**",
+            "/cooler-types", "/cooler-types/**",
+            "/case-sizes", "/case-sizes/**",
+            "/pcie-versions", "/pcie-versions/**",
+            "/pcie-connectors", "/pcie-connectors/**"
+    };
+
     private final String[] SWAGGER_WHITELIST = {
             "/swagger-ui/**",
             "/swagger-ui.html",
@@ -46,6 +67,10 @@ public class SecurityConfig {
                 request
                         // Allow Swagger/OpenAPI endpoints first - without any restrictions
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        // Allow public static images
+                        .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                        // Public GET for PC components and sub-components
+                        .requestMatchers(HttpMethod.GET, COMPONENT_ENDPOINTS).permitAll()
                         // Then allow public endpoints
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENPOINTS).permitAll()

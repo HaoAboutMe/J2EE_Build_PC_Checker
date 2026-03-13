@@ -10,6 +10,7 @@ import com.j2ee.buildpcchecker.repository.InterfaceTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class InterfaceTypeService {
      * @param request Interface Type creation request
      * @return InterfaceTypeResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public InterfaceTypeResponse createInterfaceType(InterfaceTypeRequest request) {
         log.info("Creating new Interface Type: {}", request.getId());
 
@@ -75,6 +77,7 @@ public class InterfaceTypeService {
      * @param interfaceTypeId Interface Type ID
      * @return InterfaceTypeResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public InterfaceTypeResponse updateInterfaceType(InterfaceTypeRequest request, String interfaceTypeId) {
         log.info("Updating Interface Type with ID: {}", interfaceTypeId);
 
@@ -95,6 +98,7 @@ public class InterfaceTypeService {
      * Delete Interface Type by ID
      * @param interfaceTypeId Interface Type ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteInterfaceType(String interfaceTypeId) {
         log.info("Deleting Interface Type with ID: {}", interfaceTypeId);
 

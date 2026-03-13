@@ -17,6 +17,7 @@ import com.j2ee.buildpcchecker.repository.SsdTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class SsdService {
      * @param request SSD creation request
      * @return SsdResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public SsdResponse createSsd(SsdCreationRequest request) {
         log.info("Creating new SSD: {}", request.getName());
 
@@ -112,6 +114,7 @@ public class SsdService {
      * @param ssdId SSD ID
      * @return SsdResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public SsdResponse updateSsd(SsdUpdateRequest request, String ssdId) {
         log.info("Updating SSD with ID: {}", ssdId);
 
@@ -163,6 +166,7 @@ public class SsdService {
      * Delete SSD by ID
      * @param ssdId SSD ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSsd(String ssdId) {
         log.info("Deleting SSD with ID: {}", ssdId);
 

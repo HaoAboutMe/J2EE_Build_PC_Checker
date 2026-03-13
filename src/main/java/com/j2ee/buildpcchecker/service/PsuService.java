@@ -13,6 +13,7 @@ import com.j2ee.buildpcchecker.repository.PsuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -34,6 +35,7 @@ public class PsuService {
      * @param request PSU creation request
      * @return PsuResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public PsuResponse createPsu(PsuCreationRequest request) {
         log.info("Creating new PSU: {}", request.getName());
 
@@ -98,6 +100,7 @@ public class PsuService {
      * @param psuId PSU ID
      * @return PsuResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public PsuResponse updatePsu(PsuUpdateRequest request, String psuId) {
         log.info("Updating PSU with ID: {}", psuId);
 
@@ -133,6 +136,7 @@ public class PsuService {
      * Delete PSU by ID
      * @param psuId PSU ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deletePsu(String psuId) {
         log.info("Deleting PSU with ID: {}", psuId);
 

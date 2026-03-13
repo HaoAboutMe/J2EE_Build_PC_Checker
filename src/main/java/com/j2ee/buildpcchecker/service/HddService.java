@@ -15,6 +15,7 @@ import com.j2ee.buildpcchecker.repository.HddRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class HddService {
      * @param request HDD creation request
      * @return HddResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public HddResponse createHdd(HddCreationRequest request) {
         log.info("Creating new HDD: {}", request.getName());
 
@@ -101,6 +103,7 @@ public class HddService {
      * @param hddId HDD ID
      * @return HddResponse
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public HddResponse updateHdd(HddUpdateRequest request, String hddId) {
         log.info("Updating HDD with ID: {}", hddId);
 
@@ -142,6 +145,7 @@ public class HddService {
      * Delete HDD by ID
      * @param hddId HDD ID
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteHdd(String hddId) {
         log.info("Deleting HDD with ID: {}", hddId);
 
