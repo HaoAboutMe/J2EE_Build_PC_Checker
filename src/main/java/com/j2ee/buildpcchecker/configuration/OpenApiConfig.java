@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,10 +17,13 @@ public class OpenApiConfig {
 
     private static final String SECURITY_SCHEME_NAME = "Bearer Authentication";
 
+    @Value("${app.api.dev-url}")
+    private String devUrl;
+
     @Bean
     public OpenAPI customOpenAPI() {
         Server devServer = new Server();
-        devServer.setUrl("http://localhost:8080/identity");
+        devServer.setUrl(devUrl);
         devServer.setDescription("Development Server");
 
         Info info = new Info()
