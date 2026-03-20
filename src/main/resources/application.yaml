@@ -6,19 +6,23 @@ server:
 spring:
   application:
     name: buildpcchecker
+
   datasource:
-    url: jdbc:mysql://localhost:3306/identity_service
-    username: root
-    password: 123456
+    url: jdbc:mysql://${MYSQLHOST}:${MYSQLPORT}/${MYSQLDATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+
   mail:
     host: smtp.gmail.com
     port: 587
-    username: lookatwidget@gmail.com  # Thay bằng email của bạn
-    password: yygjtzpdjueh msmr      # Thay bằng App Password của Gmail
+    username: ${MAIL_USER}
+    password: ${MAIL_PASS}
     properties:
       mail:
         smtp:
@@ -26,21 +30,18 @@ spring:
           starttls:
             enable: true
             required: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
 
 app:
-  base-url: http://localhost:8080/identity  # URL base của ứng dụng
+  base-url: ${BASE_URL}
   file:
-    upload-dir: ${user.dir}/uploads/images
+    upload-dir: ${UPLOAD_DIR:/tmp/uploads}
   openapi:
-    dev-url: http://localhost:8080
+    dev-url: ${BASE_URL}
 
 jwt:
-  signerKey: "ef251fc07ebf85497bf3b3e3c558386a22756bacb907d9e08d345bfe269ede05"
-  valid-duration: 300 # in seconds
-  refreshable-duration: 1200 # seconds
+  signerKey: ${JWT_SECRET}
+  valid-duration: 300
+  refreshable-duration: 1200
 
 springdoc:
   api-docs:
@@ -49,9 +50,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
-    operations-sorter: method
-    tags-sorter: alpha
-    try-it-out-enabled: true
-    filter: true
-    display-request-duration: true
-  show-actuator: false
