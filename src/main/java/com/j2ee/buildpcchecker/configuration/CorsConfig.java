@@ -17,6 +17,8 @@ public class CorsConfig {
 
         // Cho phép các origin từ Live Server
         configuration.setAllowedOrigins(Arrays.asList(
+                "http://20.194.26.75",
+                "http://20.194.26.75:80",
                 "http://127.0.0.1:5500",
                 "http://localhost:5500",
                 "http://127.0.0.1:5501",

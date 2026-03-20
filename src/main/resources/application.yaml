@@ -7,9 +7,10 @@ spring:
   application:
     name: buildpcchecker
   datasource:
+    # Vẫn giữ localhost vì code Spring Boot và MySQL đang nằm chung trên 1 chiếc VPS
     url: jdbc:mysql://localhost:3306/identity_service
-    username: root
-    password: 123456
+    username: identity_user  # <-- SỬA: Dùng đúng tên user bạn vừa gõ lệnh tạo trên Linux
+    password: 123456         # <-- SỬA: Mật khẩu của user đó
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,8 +18,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: lookatwidget@gmail.com  # Thay bằng email của bạn
-    password: yygjtzpdjueh msmr      # Thay bằng App Password của Gmail
+    username: lookatwidget@gmail.com
+    password: yygjtzpdjueh msmr # Nhớ thu hồi sau khi test xong nhé!
     properties:
       mail:
         smtp:
@@ -31,11 +32,13 @@ spring:
           writetimeout: 5000
 
 app:
-  base-url: http://localhost:8080/identity  # URL base của ứng dụng
+  # <-- SỬA: Thay <IP_VPS_CUA_BAN> bằng địa chỉ IP Public thật (ví dụ: 20.123.45.67)
+  base-url: http://20.194.26.75:8080/identity
   file:
     upload-dir: ${user.dir}/uploads/images
   openapi:
-    dev-url: http://localhost:8080
+    # <-- SỬA: Thay localhost bằng IP VPS để Swagger UI gọi đúng API trên Internet
+    dev-url: http://20.194.26.75:8080
 
 jwt:
   signerKey: "ef251fc07ebf85497bf3b3e3c558386a22756bacb907d9e08d345bfe269ede05"

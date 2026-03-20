@@ -20,7 +20,7 @@ public class FileUploadController {
 
     final FileStorageService fileStorageService;
 
-    @Value("${app.base-url:http://localhost:8080/identity}")
+    @Value("${app.base-url}")
     String baseUrl;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

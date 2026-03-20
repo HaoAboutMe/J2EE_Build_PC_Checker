@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -84,9 +85,12 @@ public class SecurityConfig {
                                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
                 // Enable CORS
-                httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource));
+                httpSecurity
+                        // 1. Cấu hình CORS trước tiên
+                        .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                        // 2. Tắt CSRF vì bạn dùng JWT
+                        .csrf(AbstractHttpConfigurer::disable);
 
-                httpSecurity.csrf(AbstractHttpConfigurer::disable);
                 return httpSecurity.build();
         }
 

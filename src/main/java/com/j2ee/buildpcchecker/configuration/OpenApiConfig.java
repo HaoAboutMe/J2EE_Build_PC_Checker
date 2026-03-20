@@ -19,7 +19,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         Server devServer = new Server();
-        devServer.setUrl("http://localhost:8080/identity");
+        devServer.setUrl("http://20.194.26.75:8080/identity");
         devServer.setDescription("Development Server");
 
         Info info = new Info()
