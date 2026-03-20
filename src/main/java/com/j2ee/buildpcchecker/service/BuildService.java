@@ -7,9 +7,8 @@ import com.j2ee.buildpcchecker.entity.PcBuildPart;
 import com.j2ee.buildpcchecker.entity.User;
 import com.j2ee.buildpcchecker.exception.AppException;
 import com.j2ee.buildpcchecker.exception.ErrorCode;
-import com.j2ee.buildpcchecker.repository.PcBuildPartRepository;
-import com.j2ee.buildpcchecker.repository.PcBuildRepository;
-import com.j2ee.buildpcchecker.repository.UserRepository;
+import com.j2ee.buildpcchecker.repository.*;
+import com.j2ee.buildpcchecker.mapper.*;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.j2ee.buildpcchecker.dto.request.BuildCheckRequest;
+import com.j2ee.buildpcchecker.dto.response.CompatibilityResult;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -31,6 +35,29 @@ public class BuildService {
     PcBuildRepository pcBuildRepository;
     PcBuildPartRepository pcBuildPartRepository;
     UserRepository userRepository;
+    CompatibilityService compatibilityService;
+
+    // Component Repositories
+    CpuRepository cpuRepository;
+    MainboardRepository mainboardRepository;
+    RamRepository ramRepository;
+    VgaRepository vgaRepository;
+    PsuRepository psuRepository;
+    CaseRepository caseRepository;
+    CoolerRepository coolerRepository;
+    SsdRepository ssdRepository;
+    HddRepository hddRepository;
+
+    // Component Mappers
+    CpuMapper cpuMapper;
+    MainboardMapper mainboardMapper;
+    RamMapper ramMapper;
+    VgaMapper vgaMapper;
+    PsuMapper psuMapper;
+    CaseMapper caseMapper;
+    CoolerMapper coolerMapper;
+    SsdMapper ssdMapper;
+    HddMapper hddMapper;
 
     @Transactional
     public PcBuildResponse saveBuild(SaveBuildRequest request) {
@@ -42,6 +69,39 @@ public class BuildService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (pcBuildRepository.existsByUserIdAndName(user.getId(), request.getName())) {
+            throw new AppException(ErrorCode.BUILD_NAME_ALREADY_EXISTS);
+        }
+
+        // Validate compatibility before saving
+        Map<String, String> parts = request.getParts();
+        if (parts != null && !parts.isEmpty()) {
+            BuildCheckRequest checkRequest = BuildCheckRequest.builder()
+                    .cpuId(parts.getOrDefault("cpu", parts.get("CPU")))
+                    .mainboardId(parts.getOrDefault("mainboard", parts.get("MAINBOARD")))
+                    .ramId(parts.getOrDefault("ram", parts.get("RAM")))
+                    .vgaId(parts.getOrDefault("vga", parts.get("VGA")))
+                    .psuId(parts.getOrDefault("psu", parts.get("PSU")))
+                    .caseId(parts.getOrDefault("case", parts.get("CASE")))
+                    .coolerId(parts.getOrDefault("cooler", parts.get("COOLER")))
+                    .build();
+
+            String ssdId = parts.getOrDefault("ssd", parts.get("SSD"));
+            if (ssdId != null && !ssdId.isBlank()) {
+                checkRequest.setSsdIds(Collections.singletonList(ssdId));
+            }
+
+            String hddId = parts.getOrDefault("hdd", parts.get("HDD"));
+            if (hddId != null && !hddId.isBlank()) {
+                checkRequest.setHddIds(Collections.singletonList(hddId));
+            }
+
+            CompatibilityResult compatibilityResult = compatibilityService.checkCompatibility(checkRequest);
+            if (!compatibilityResult.isCompatible()) {
+                throw new AppException(ErrorCode.BUILD_INCOMPATIBLE);
+            }
+        }
 
         // Step 2: Create PcBuild entity
         PcBuild pcBuild = PcBuild.builder()
@@ -132,23 +192,92 @@ public class BuildService {
     }
 
     private PcBuildResponse convertToResponse(PcBuild build) {
-        Map<String, String> partsMap = new HashMap<>();
+        Map<String, Object> tempPartsMap = new HashMap<>();
 
         if (build.getParts() != null) {
             for (PcBuildPart part : build.getParts()) {
-                partsMap.put(part.getPartType(), part.getPartId());
+                String partId = part.getPartId();
+                String partType = part.getPartType();
+                Object partDetail = null;
+
+                try {
+                    switch (partType) {
+                        case "CPU":
+                            partDetail = cpuRepository.findById(partId)
+                                    .map(cpuMapper::toCpuResponse).orElse(null);
+                            break;
+                        case "MAINBOARD":
+                            partDetail = mainboardRepository.findById(partId)
+                                    .map(mainboardMapper::toMainboardResponse).orElse(null);
+                            break;
+                        case "RAM":
+                            partDetail = ramRepository.findById(partId)
+                                    .map(ramMapper::toRamResponse).orElse(null);
+                            break;
+                        case "VGA":
+                        case "GPU":
+                            partDetail = vgaRepository.findById(partId)
+                                    .map(vgaMapper::toVgaResponse).orElse(null);
+                            break;
+                        case "PSU":
+                            partDetail = psuRepository.findById(partId)
+                                    .map(psuMapper::toPsuResponse).orElse(null);
+                            break;
+                        case "CASE":
+                            partDetail = caseRepository.findById(partId)
+                                    .map(caseMapper::toCaseResponse).orElse(null);
+                            break;
+                        case "COOLER":
+                            partDetail = coolerRepository.findById(partId)
+                                    .map(coolerMapper::toCoolerResponse).orElse(null);
+                            break;
+                        case "SSD":
+                            partDetail = ssdRepository.findById(partId)
+                                    .map(ssdMapper::toSsdResponse).orElse(null);
+                            break;
+                        case "HDD":
+                            partDetail = hddRepository.findById(partId)
+                                    .map(hddMapper::toHddResponse).orElse(null);
+                            break;
+                        default:
+                            partDetail = partId; // Fallback to ID only
+                    }
+                } catch (Exception e) {
+                    log.error("Error fetching part details for type {} and ID {}", partType, partId, e);
+                }
+
+                // If detail not found (deleted) or error, fallback to ID
+                if (partDetail == null) {
+                    partDetail = partId;
+                }
+
+                tempPartsMap.put(partType, partDetail);
             }
+        }
+
+        // Sort parts in desired order
+        Map<String, Object> orderedPartsMap = new LinkedHashMap<>();
+        String[] sortedKeys = {"CPU", "MAINBOARD", "RAM", "VGA", "GPU", "SSD", "HDD", "PSU", "COOLER", "CASE"};
+
+        for (String key : sortedKeys) {
+            if (tempPartsMap.containsKey(key)) {
+                orderedPartsMap.put(key, tempPartsMap.get(key));
+                tempPartsMap.remove(key);
+            }
+        }
+
+        // Add remaining parts (if any)
+        if (!tempPartsMap.isEmpty()) {
+            orderedPartsMap.putAll(tempPartsMap);
         }
 
         return PcBuildResponse.builder()
                 .id(build.getId())
                 .name(build.getName())
                 .description(build.getDescription())
-                .totalTdp(build.getTotalTdp())
                 .createdAt(build.getCreatedAt())
                 .userId(build.getUser().getId())
-                .parts(partsMap)
+                .parts(orderedPartsMap)
                 .build();
     }
 }
-

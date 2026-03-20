@@ -5,42 +5,41 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Table(name = "password_reset_otp")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PcBuild {
+public class PasswordResetOtp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
     @Column(nullable = false)
-    String name;
+    String email;
 
-    @Column(columnDefinition = "TEXT")
-    String description;
+    @Column(nullable = false, length = 6)
+    String otp;
 
+    @Column(name = "expiry_date", nullable = false)
+    LocalDateTime expiryDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;
-
-    @OneToMany(mappedBy = "build", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    List<PcBuildPart> parts = new ArrayList<>();
+    @Column(name = "is_used", nullable = false)
+    Boolean isUsed = false;
 
+    @Column(name = "created_at")
     LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        expiryDate = LocalDateTime.now().plusMinutes(5); // OTP hết hạn sau 5 phút
+        if (isUsed == null) isUsed = false;
     }
 }
-
