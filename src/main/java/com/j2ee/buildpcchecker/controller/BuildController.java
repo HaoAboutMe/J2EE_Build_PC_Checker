@@ -149,6 +149,52 @@ public class BuildController {
         }
 
         /**
+         * Update an existing PC build
+         * PUT /builds/{id}
+         */
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Build updated successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class), examples = @ExampleObject(name = "Success Response", value = """
+                        {
+                          "code": 1000,
+                          "message": "Build updated successfully",
+                          "result": {
+                            "id": "7c9e8b5a-1234-5678-90ab-cdef12345678",
+                            "name": "Updated Gaming Build",
+                            "description": "Updated info",
+                            "parts": { }
+                          }
+                        }
+                        """)))
+        @PutMapping("/{id}")
+        public ApiResponse<PcBuildResponse> updateBuild(
+                        @io.swagger.v3.oas.annotations.Parameter(description = "ID of the build to update", required = true) @PathVariable("id") String id,
+                        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "PC Build configuration to update", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = SaveBuildRequest.class), examples = @ExampleObject(name = "Sample Update Request", value = """
+                                        {
+                                          "name": "Gaming Build 2026",
+                                          "description": "Intel i9 + RTX 4090 Gaming Setup",
+                                          "parts": {
+                                            "cpu": "uuid-of-cpu",
+                                            "mainboard": "uuid-of-mainboard",
+                                            "ram": "uuid-of-ram",
+                                            "vga": "uuid-of-vga",
+                                            "psu": "uuid-of-psu",
+                                            "case": "uuid-of-case",
+                                            "cooler": "uuid-of-cooler",
+                                            "ssd": "uuid-of-ssd",
+                                            "hdd": "uuid-of-hdd"
+                                          }
+                                        }
+                                        """))) @Valid @RequestBody SaveBuildRequest request) {
+                log.info("Updating PC build with ID: {}", id);
+
+                PcBuildResponse response = buildService.updateBuild(id, request);
+
+                return ApiResponse.<PcBuildResponse>builder()
+                                .message("Build updated successfully")
+                                .result(response)
+                                .build();
+        }
+
+        /**
          * Get all builds for the current user
          * GET /builds
          */
