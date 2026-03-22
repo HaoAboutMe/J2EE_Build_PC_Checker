@@ -133,6 +133,90 @@ public class BuildService {
         return convertToResponse(savedBuild);
     }
 
+    @Transactional
+    public PcBuildResponse updateBuild(String buildId, SaveBuildRequest request) {
+        log.info("Updating PC build with ID: {}", buildId);
+
+        // Step 1: Get authenticated user from SecurityContext
+        var context = SecurityContextHolder.getContext().getAuthentication();
+        String email = context.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        PcBuild existingBuild = pcBuildRepository.findById(buildId)
+                .orElseThrow(() -> new AppException(ErrorCode.BUILD_NOT_FOUND));
+
+        if (!existingBuild.getUser().getId().equals(user.getId())) {
+            throw new AppException(ErrorCode.BUILD_UNAUTHORIZED_ACCESS);
+        }
+
+        if (!existingBuild.getName().equals(request.getName()) &&
+                pcBuildRepository.existsByUserIdAndName(user.getId(), request.getName())) {
+            throw new AppException(ErrorCode.BUILD_NAME_ALREADY_EXISTS);
+        }
+
+        // Validate compatibility before updating
+        Map<String, String> parts = request.getParts();
+        if (parts != null && !parts.isEmpty()) {
+            BuildCheckRequest checkRequest = BuildCheckRequest.builder()
+                    .cpuId(parts.getOrDefault("cpu", parts.get("CPU")))
+                    .mainboardId(parts.getOrDefault("mainboard", parts.get("MAINBOARD")))
+                    .ramId(parts.getOrDefault("ram", parts.get("RAM")))
+                    .vgaId(parts.getOrDefault("vga", parts.get("VGA")))
+                    .psuId(parts.getOrDefault("psu", parts.get("PSU")))
+                    .caseId(parts.getOrDefault("case", parts.get("CASE")))
+                    .coolerId(parts.getOrDefault("cooler", parts.get("COOLER")))
+                    .build();
+
+            String ssdId = parts.getOrDefault("ssd", parts.get("SSD"));
+            if (ssdId != null && !ssdId.isBlank()) {
+                checkRequest.setSsdIds(Collections.singletonList(ssdId));
+            }
+
+            String hddId = parts.getOrDefault("hdd", parts.get("HDD"));
+            if (hddId != null && !hddId.isBlank()) {
+                checkRequest.setHddIds(Collections.singletonList(hddId));
+            }
+
+            CompatibilityResult compatibilityResult = compatibilityService.checkCompatibility(checkRequest);
+            if (!compatibilityResult.isCompatible()) {
+                throw new AppException(ErrorCode.BUILD_INCOMPATIBLE);
+            }
+        }
+
+        // Update basic info
+        existingBuild.setName(request.getName());
+        existingBuild.setDescription(request.getDescription());
+
+        // Delete old parts
+        if (existingBuild.getParts() != null && !existingBuild.getParts().isEmpty()) {
+            pcBuildPartRepository.deleteAll(existingBuild.getParts());
+            existingBuild.getParts().clear();
+        }
+
+        // Add new parts
+        if (request.getParts() != null && !request.getParts().isEmpty()) {
+            for (Map.Entry<String, String> entry : request.getParts().entrySet()) {
+                PcBuildPart buildPart = PcBuildPart.builder()
+                        .partType(entry.getKey().toUpperCase())
+                        .partId(entry.getValue())
+                        .quantity(1)
+                        .build(existingBuild)
+                        .build();
+
+                pcBuildPartRepository.save(buildPart);
+                existingBuild.getParts().add(buildPart);
+            }
+            log.info("Updated {} parts for build ID: {}", existingBuild.getParts().size(), existingBuild.getId());
+        }
+
+        // Save updated build
+        PcBuild savedBuild = pcBuildRepository.save(existingBuild);
+        
+        return convertToResponse(savedBuild);
+    }
+
     public PcBuildResponse getBuildById(String buildId) {
         log.info("Getting PC build with ID: {}", buildId);
 
